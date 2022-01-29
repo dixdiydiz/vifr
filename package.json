@@ -1,0 +1,16 @@
+{
+  "name": "vifr",
+  "version": "0.0.1",
+  "description": "SSR base Vite for React",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/dixdiydiz/vifr",
+  "packageManager": "pnpm@6.28.0",
+  "engines": {
+    "node": ">=16",
+    "pm": "pmpn@^6.28.0"
+  }
+}
