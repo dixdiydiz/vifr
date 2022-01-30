@@ -10,7 +10,6 @@
   "homepage": "https://github.com/dixdiydiz/vifr",
   "packageManager": "pnpm@6.28.0",
   "engines": {
-    "node": ">=16",
-    "pm": "pmpn@^6.28.0"
+    "node": ">=16"
   }
 }
