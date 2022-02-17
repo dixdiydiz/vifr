@@ -1,12 +1,20 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "outDir": "dist",
+    "module": "ESNext",
+    "target": "ESNext",
+    "sourceMap": false,
     "moduleResolution": "node",
     "strict": true,
-    "declaration": true,
     "noImplicitOverride": true,
+    "resolveJsonModule": true,
     "noUnusedLocals": true,
     "esModuleInterop": true,
-    "useUnknownInCatchVariables": false
-  }
+    "useUnknownInCatchVariables": false,
+    "declaration": true,
+    "declarationMap": false,
+    "declarationDir": "dist/types",
+    "types": ["node"]
+  },
+  "include": ["src/**/*.ts", "types/**/*.ts"]
 }

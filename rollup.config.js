@@ -1,7 +1,6 @@
-import path from 'path'
-import  fs from 'fs'
 import license from 'rollup-plugin-license'
 import nodeResolve from '@rollup/plugin-node-resolve'
+import commonjs from '@rollup/plugin-commonjs'
 import typescript from 'rollup-plugin-typescript2';
 
 function getVersion(sourceDir) {
@@ -22,9 +21,6 @@ function licensePlugin (libraryName) {
     },
     thirdParty: {
       includePrivate: true,
-      output() {
-        fs.writeFileSync('LICENSE.md', licenseText)
-      }
     }
   })
 }
@@ -37,23 +33,25 @@ function vifrServer () {
   const SOURCE_DIR = "packages/vifr-server"
   const OUTPUT_DIR = "packages/vifr-server/dist"
   return {
-    input: [`${SOURCE_DIR}/cli.ts`, `${SOURCE_DIR}/index.ts`],
-    external: true,
+    external: [/node_modules/],
+    input: [`${SOURCE_DIR}/src/cli.ts`, `${SOURCE_DIR}/src/index.ts`],
     output: {
       dir: OUTPUT_DIR,
-      exports: 'named',
       format: 'cjs',
+      entryFileNames: `[name].js`,
+      exports: "named",
     },
     plugins: [
+      nodeResolve({ extensions: [ '.ts'] }),
+      commonjs(),
       typescript({
+        rollupCommonJSResolveHack: true,
         tsconfig: `${SOURCE_DIR}/tsconfig.json`
       }),
-      nodeResolve({ extensions: [".ts"] }),
       licensePlugin('@vifr/server'),
     ]
   }
 }
-
 
 
 

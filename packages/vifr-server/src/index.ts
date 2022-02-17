@@ -30,3 +30,5 @@ export async function createServer (inlineConfig: InlineConfig = {}): Promise<Vi
   }
   return ViteCreateServer(inlineConfig)
 }
+
+export default createServer
