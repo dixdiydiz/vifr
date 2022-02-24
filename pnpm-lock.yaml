@@ -54,13 +54,18 @@ importers:
 
   packages/vifr-server:
     specifiers:
+      '@types/connect': ^3.4.35
       cac: ^6.7.12
       chalk: ^5.0.0
+      picocolors: ^1.0.0
       vite: ^2.8.1
     dependencies:
       cac: 6.7.12
       chalk: 5.0.0
       vite: 2.8.1
+    devDependencies:
+      '@types/connect': 3.4.35
+      picocolors: 1.0.0
 
 packages:
 
@@ -138,6 +143,12 @@ packages:
 
   /@types/bluebird/3.5.36:
     resolution: {integrity: sha512-HBNx4lhkxN7bx6P0++W8E289foSu8kO8GCk2unhuVggO+cE7rh9DhZUyPhUxNRG9m+5B5BTKxZQ5ZP92x/mx9Q==}
+    dev: true
+
+  /@types/connect/3.4.35:
+    resolution: {integrity: sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==}
+    dependencies:
+      '@types/node': 17.0.18
     dev: true
 
   /@types/estree/0.0.39:
@@ -936,7 +947,6 @@ packages:
 
   /picocolors/1.0.0:
     resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==}
-    dev: false
 
   /picomatch/2.3.1:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}

@@ -18,5 +18,9 @@
   "engines": {
     "node": ">=16"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@types/connect": "^3.4.35",
+    "picocolors": "^1.0.0"
+  }
 }
