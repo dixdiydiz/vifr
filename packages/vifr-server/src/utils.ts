@@ -15,3 +15,4 @@ export const isAsyncFunction = (arg: unknown): boolean =>
   toString(arg) == 'AsyncFunction'
 export const isGeneratorFunction = (arg: unknown): boolean =>
   toString(arg) == 'GeneratorFunction'
+
