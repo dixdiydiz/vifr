@@ -35,7 +35,7 @@ async function createServer(
 
       let  html
       if (!isProd) {
-        html = vifrDevTools.replaceSsrOutletHtml(url)
+        html = await vifrDevTools.replaceSsrOutletHtml(url)
       } else {
        const template = fs.readFileSync(resolve('dist/client/index.html'), 'utf-8')
         const  render = require('./dist/server/entry-server.js').render
@@ -56,7 +56,7 @@ async function createServer(
     }
   })
 
-  return { app, vite }
+  return { app }
 }
 
 if (!isTest) {

@@ -20,6 +20,7 @@ export interface DevMiddlewareHelper {
 
 export async function devMiddlewareTools (app:Server, inlineConfig: InlineConfig = {}): Promise<DevMiddlewareHelper> {
   const mode = 'development'
+  // todo: 获取配置后，vite 设置 configfile = false
   const {config, configFile} = await resolveConfig(inlineConfig, 'serve', mode)
   console.log(config)
   const {root = process.cwd(),server = {}} = inlineConfig
@@ -56,7 +57,8 @@ function createReplaceSsrOutletHtml (viteServer: ViteDevServer, root: string): (
     try {
       const content = await fsPromise.readFile(path.resolve(root, 'index.html'), {encoding: 'utf-8'})
       const template = await viteServer.transformIndexHtml(url, content)
-      const render = (await viteServer.ssrLoadModule(path.resolve(root, 'src/entry-server.jsx'))).render
+      const {render} = await viteServer.ssrLoadModule(path.resolve(root, 'src/entry-server.jsx'))
+      // @ts-ignore todo: why Record<string, any>
       const appHtml = render(url)
       const html = template.replace(`<!--ssr-outlet-->`, appHtml)
       return html
