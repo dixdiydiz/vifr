@@ -58,7 +58,7 @@ function createReplaceSsrOutletHtml (viteServer: ViteDevServer, root: string): (
       const content = await fsPromise.readFile(path.resolve(root, 'index.html'), {encoding: 'utf-8'})
       const template = await viteServer.transformIndexHtml(url, content)
       const {render} = await viteServer.ssrLoadModule(path.resolve(root, 'src/entry-server.jsx'))
-      // @ts-ignore todo: why Record<string, any>
+      // @ts-ignore todo: why react 17 is not Record<string, any>
       const appHtml = render(url)
       const html = template.replace(`<!--ssr-outlet-->`, appHtml)
       return html
