@@ -30,7 +30,6 @@ importers:
 
   packages/playground/feature:
     specifiers:
-      '@vifr/server': workspace:*
       compression: ^1.7.4
       express: ^4.17.1
       react: ^18.0.0-rc.0-next-fe905f152-20220107
@@ -38,19 +37,38 @@ importers:
       react-router: ^6.2.1
       react-router-dom: ^6.2.1
       serve-static: ^1.14.1
+      vifr: workspace:*
     dependencies:
       react: 18.0.0-rc.0-next-fe905f152-20220107
       react-dom: 18.0.0-rc.0-next-fe905f152-20220107_e32785dbcafa2fde92a71a8f50f52ce6
       react-router: 6.2.1_e32785dbcafa2fde92a71a8f50f52ce6
       react-router-dom: 6.2.1_88bc4fee344d9ebe6e1abd431fb36b31
     devDependencies:
-      '@vifr/server': link:../../vifr-server
       compression: 1.7.4
       express: 4.17.3
       serve-static: 1.14.2
+      vifr: link:../../vifr
 
   packages/vifr:
-    specifiers: {}
+    specifiers:
+      '@types/connect': ^3.4.35
+      '@types/debug': ^4.1.7
+      '@vitejs/plugin-react': ^1.2.0
+      cac: ^6.7.12
+      chalk: ^5.0.0
+      debug: ^4.3.3
+      picocolors: ^1.0.0
+      vite: ^2.8.1
+    dependencies:
+      '@vitejs/plugin-react': 1.2.0
+      cac: 6.7.12
+      chalk: 5.0.0
+      vite: 2.8.1
+    devDependencies:
+      '@types/connect': 3.4.35
+      '@types/debug': 4.1.7
+      debug: 4.3.3
+      picocolors: 1.0.0
 
   packages/vifr-server:
     specifiers:

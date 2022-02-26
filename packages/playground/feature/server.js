@@ -2,7 +2,7 @@
 const fs = require('fs')
 const path = require('path')
 const express = require('express')
-const {devMiddlewareTools} = require('@vifr/server')
+const {devMiddlewareTools} = require('vifr')
 
 const isTest = process.env.NODE_ENV === 'test' || !!process.env.VITE_TEST_BUILD
 

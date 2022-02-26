@@ -29,9 +29,9 @@ function licensePlugin (libraryName) {
 /**
  * @type {import('rollup').RollupOptions}
  */
-function vifrServer () {
-  const SOURCE_DIR = "packages/vifr-server"
-  const OUTPUT_DIR = "packages/vifr-server/dist"
+function vifr () {
+  const SOURCE_DIR = "packages/vifr"
+  const OUTPUT_DIR = "packages/vifr/dist"
   return {
     external: [/node_modules/],
     input: [`${SOURCE_DIR}/src/cli.ts`, `${SOURCE_DIR}/src/index.ts`],
@@ -42,13 +42,13 @@ function vifrServer () {
       exports: "named",
     },
     plugins: [
-      nodeResolve({ extensions: [ '.ts'] }),
+      nodeResolve({ extensions: [ '.ts'], }),
       commonjs(),
       typescript({
         rollupCommonJSResolveHack: true,
         tsconfig: `${SOURCE_DIR}/tsconfig.json`
       }),
-      licensePlugin('@vifr/server'),
+      licensePlugin('vifr'),
     ]
   }
 }
@@ -57,6 +57,6 @@ function vifrServer () {
 
 export default commandLineArgs => {
   return [
-    vifrServer(commandLineArgs),
+    vifr(commandLineArgs),
   ];
 }
