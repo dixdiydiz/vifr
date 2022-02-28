@@ -6,4 +6,4 @@ type VifrDevServer = ViteDevServer
 
 export {VifrDevServer, InlineConfig }
 
-export * from './agent-vite/createViteServer'
+export * from './agent-vite/createServer'

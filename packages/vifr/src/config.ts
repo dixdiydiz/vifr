@@ -70,6 +70,14 @@ export function lookupConfigFile (): string {
   throw err
 }
 
+export function mergeConfig (
+  defaults: Record<string, any>,
+  overrides: Record<string, any>,
+) {
+  const isProduction = process.env.NODE_ENV === 'production'
+
+}
+
 export function mergePlugins (mode: string = 'development'): PluginOption[] {
   const plugins = [
     ...reactPlugin()

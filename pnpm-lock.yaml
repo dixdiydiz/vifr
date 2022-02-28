@@ -32,17 +32,17 @@ importers:
     specifiers:
       compression: ^1.7.4
       express: ^4.17.1
-      react: ^18.0.0-rc.0-next-fe905f152-20220107
-      react-dom: ^18.0.0-rc.0-next-fe905f152-20220107
+      react: ^17.0.2
+      react-dom: ^17.0.2
       react-router: ^6.2.1
       react-router-dom: ^6.2.1
       serve-static: ^1.14.1
       vifr: workspace:*
     dependencies:
-      react: 18.0.0-rc.0-next-fe905f152-20220107
-      react-dom: 18.0.0-rc.0-next-fe905f152-20220107_e32785dbcafa2fde92a71a8f50f52ce6
-      react-router: 6.2.1_e32785dbcafa2fde92a71a8f50f52ce6
-      react-router-dom: 6.2.1_88bc4fee344d9ebe6e1abd431fb36b31
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+      react-router: 6.2.1_react@17.0.2
+      react-router-dom: 6.2.1_react-dom@17.0.2+react@17.0.2
     devDependencies:
       compression: 1.7.4
       express: 4.17.3
@@ -51,42 +51,19 @@ importers:
 
   packages/vifr:
     specifiers:
-      '@types/connect': ^3.4.35
       '@types/debug': ^4.1.7
       '@vitejs/plugin-react': ^1.2.0
       cac: ^6.7.12
       chalk: ^5.0.0
       debug: ^4.3.3
       picocolors: ^1.0.0
-      vite: ^2.8.1
+      vite: ^2.8.4
     dependencies:
       '@vitejs/plugin-react': 1.2.0
       cac: 6.7.12
       chalk: 5.0.0
-      vite: 2.8.1
+      vite: 2.8.4
     devDependencies:
-      '@types/connect': 3.4.35
-      '@types/debug': 4.1.7
-      debug: 4.3.3
-      picocolors: 1.0.0
-
-  packages/vifr-server:
-    specifiers:
-      '@types/connect': ^3.4.35
-      '@types/debug': ^4.1.7
-      '@vitejs/plugin-react': ^1.2.0
-      cac: ^6.7.12
-      chalk: ^5.0.0
-      debug: ^4.3.3
-      picocolors: ^1.0.0
-      vite: ^2.8.1
-    dependencies:
-      '@vitejs/plugin-react': 1.2.0
-      cac: 6.7.12
-      chalk: 5.0.0
-      vite: 2.8.1
-    devDependencies:
-      '@types/connect': 3.4.35
       '@types/debug': 4.1.7
       debug: 4.3.3
       picocolors: 1.0.0
@@ -450,12 +427,6 @@ packages:
 
   /@types/bluebird/3.5.36:
     resolution: {integrity: sha512-HBNx4lhkxN7bx6P0++W8E289foSu8kO8GCk2unhuVggO+cE7rh9DhZUyPhUxNRG9m+5B5BTKxZQ5ZP92x/mx9Q==}
-    dev: true
-
-  /@types/connect/3.4.35:
-    resolution: {integrity: sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==}
-    dependencies:
-      '@types/node': 17.0.18
     dev: true
 
   /@types/debug/4.1.7:
@@ -1448,15 +1419,15 @@ packages:
       unpipe: 1.0.0
     dev: true
 
-  /react-dom/18.0.0-rc.0-next-fe905f152-20220107_e32785dbcafa2fde92a71a8f50f52ce6:
-    resolution: {integrity: sha512-tl+6q+8h9Vj7r4iI1jYQfLp4oHLC+f7tenqlYBw9eOyJ/SXJXzZ0Mp7QG1LYkK+oapO3vlj5I7ddnbnf8bcDJQ==}
+  /react-dom/17.0.2_react@17.0.2:
+    resolution: {integrity: sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA==}
     peerDependencies:
-      react: 18.0.0-rc.0-next-fe905f152-20220107
+      react: 17.0.2
     dependencies:
       loose-envify: 1.4.0
       object-assign: 4.1.1
-      react: 18.0.0-rc.0-next-fe905f152-20220107
-      scheduler: 0.21.0-rc.0-next-fe905f152-20220107
+      react: 17.0.2
+      scheduler: 0.20.2
     dev: false
 
   /react-refresh/0.11.0:
@@ -1464,29 +1435,29 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: false
 
-  /react-router-dom/6.2.1_88bc4fee344d9ebe6e1abd431fb36b31:
+  /react-router-dom/6.2.1_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha512-I6Zax+/TH/cZMDpj3/4Fl2eaNdcvoxxHoH1tYOREsQ22OKDYofGebrNm6CTPUcvLvZm63NL/vzCYdjf9CUhqmA==}
     peerDependencies:
       react: '>=16.8'
       react-dom: '>=16.8'
     dependencies:
       history: 5.2.0
-      react: 18.0.0-rc.0-next-fe905f152-20220107
-      react-dom: 18.0.0-rc.0-next-fe905f152-20220107_e32785dbcafa2fde92a71a8f50f52ce6
-      react-router: 6.2.1_e32785dbcafa2fde92a71a8f50f52ce6
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+      react-router: 6.2.1_react@17.0.2
     dev: false
 
-  /react-router/6.2.1_e32785dbcafa2fde92a71a8f50f52ce6:
+  /react-router/6.2.1_react@17.0.2:
     resolution: {integrity: sha512-2fG0udBtxou9lXtK97eJeET2ki5//UWfQSl1rlJ7quwe6jrktK9FCCc8dQb5QY6jAv3jua8bBQRhhDOM/kVRsg==}
     peerDependencies:
       react: '>=16.8'
     dependencies:
       history: 5.2.0
-      react: 18.0.0-rc.0-next-fe905f152-20220107
+      react: 17.0.2
     dev: false
 
-  /react/18.0.0-rc.0-next-fe905f152-20220107:
-    resolution: {integrity: sha512-eePjzo6pCiwk9iDRYG0Hn5F0p9e7dlLGIys/eeLUCxByHP90rsXg/H/842S6ggBgarcfvRtDu8cAU7kxfLC4MA==}
+  /react/17.0.2:
+    resolution: {integrity: sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==}
     engines: {node: '>=0.10.0'}
     dependencies:
       loose-envify: 1.4.0
@@ -1568,8 +1539,8 @@ packages:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
     dev: true
 
-  /scheduler/0.21.0-rc.0-next-fe905f152-20220107:
-    resolution: {integrity: sha512-+sY0WajWdMjoxbmHM8P6P1FKGw8sSVKKG/HthqTFQFPxVGbKLmV1BiFPaVF9gOyQWqmnLYSXJMN+4Bs5ZygsTw==}
+  /scheduler/0.20.2:
+    resolution: {integrity: sha512-2eWfGgAqqWFGqtdMmcL5zCMK1U8KlXv8SQFGglL3CEtd0aDVDWgeF/YoCmvln55m5zSk3J/20hTaSBeSObsQDQ==}
     dependencies:
       loose-envify: 1.4.0
       object-assign: 4.1.1
@@ -1764,8 +1735,8 @@ packages:
     engines: {node: '>= 0.8'}
     dev: true
 
-  /vite/2.8.1:
-    resolution: {integrity: sha512-Typ8qjUnW0p53gBsJpisrKcZlEbUPZATja9BG6Z09QZjg9YrnEn/htkr/VH4WhnH7eNUQeSD+wKI1lHzQRWskw==}
+  /vite/2.8.4:
+    resolution: {integrity: sha512-GwtOkkaT2LDI82uWZKcrpRQxP5tymLnC7hVHHqNkhFNknYr0hJUlDLfhVRgngJvAy3RwypkDCWtTKn1BjO96Dw==}
     engines: {node: '>=12.2.0'}
     hasBin: true
     peerDependencies:

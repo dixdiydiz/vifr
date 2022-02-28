@@ -12,8 +12,8 @@
     "debug": "node --inspect-brk server"
   },
   "dependencies": {
-    "react": "^18.0.0-rc.0-next-fe905f152-20220107",
-    "react-dom": "^18.0.0-rc.0-next-fe905f152-20220107",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-router": "^6.2.1",
     "react-router-dom": "^6.2.1"
   },
