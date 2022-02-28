@@ -6,7 +6,7 @@ import {
   createServer as ViteCreateServer,
   // mergeConfig as ViteMergeConfig,
 } from 'vite'
-import {resolveConfig, mergePlugins} from '../config'
+import {resolveConfig} from '../config'
 
 export {ViteDevServer, InlineConfig }
 
@@ -21,28 +21,9 @@ let viteServer: ViteDevServer | null = null
 
 export async function createServer (inlineConfig: InlineConfig = {}): Promise<VifrDevServer> {
   const mode = 'development'
-  const { config,} = await resolveConfig(inlineConfig, 'serve', mode)
+  const { overrideConfig } = await resolveConfig(inlineConfig, 'serve', mode)
   const {root = process.cwd()} = inlineConfig
-  const priorConfig = {
-    ...config,
-    configFile: false as const, // avoid Vite repeat handle config file
-    plugins: [
-      ...config.plugins,
-      ...mergePlugins(mode)],
-    server: {
-      ...config.server,
-      middlewareMode: 'ssr' as const,
-      watch: {
-        // During tests we edit the files too fast and sometimes chokidar
-        // misses change events, so enforce polling for consistency
-        usePolling: true,
-        interval: 100,
-      }
-    }
-  }
-  // const finalConfig = ViteMergeConfig(config, priorConfig)
-  // viteServer = await ViteCreateServer(ViteMergeConfig(ViteMergeConfig(config, inlineConfig), priorConfig))
-  viteServer = await ViteCreateServer(config)
+  viteServer = await ViteCreateServer(overrideConfig)
   console.log(viteServer)
 
   return {

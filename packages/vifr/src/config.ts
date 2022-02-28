@@ -3,7 +3,6 @@ import type {
   ServerOptions as ViteServerOptions,
   UserConfig as ViteUserConfig,
   ResolvedConfig as ViteResolvedConfig,
-  PluginOption,
 } from 'vite'
 import fs from 'fs'
 import path from 'path'
@@ -11,6 +10,7 @@ import colors from 'picocolors'
 // import debug from 'debug'
 import {createLogger, resolveConfig as ViteResolveConfig} from 'vite'
 import reactPlugin from '@vitejs/plugin-react'
+import {isObject} from './utils'
 
 export interface InlineConfig extends ViteInlineConfig {
   /**
@@ -32,24 +32,34 @@ export interface UserConfig extends ViteUserConfig {}
 // const configDebug = debug('vifr:config')
 
 export interface ResolveConfig {
-  config: ViteResolvedConfig
+  viteResolvedConfig: ViteResolvedConfig
+  overrideConfig: ViteInlineConfig,
   configFile: string
 }
 
 export async function resolveConfig (
-  inlineConfig: InlineConfig,
+  inlineConfig: InlineConfig = {},
   command: 'build' | 'serve',
   defaultMode = 'development'):Promise<ResolveConfig> {
-  const configFile = lookupConfigFile()
-  const config = await ViteResolveConfig({configFile}, command)
+  let {configFile = null} = inlineConfig
+  configFile = lookupConfigFile(configFile)
+  const viteResolvedConfig = await ViteResolveConfig({configFile}, command)
+  const overrideConfig = mergeConfig(inlineConfig, configFile)
   return {
-    config,
+    viteResolvedConfig,
+    overrideConfig,
     configFile
   }
 }
 
 
-export function lookupConfigFile (): string {
+export function lookupConfigFile (configFile?: string | null | false): string {
+  // todo: 提供提示
+  if (configFile) {
+    if (fs.existsSync(path.resolve(configFile))) {
+      return configFile
+    }
+  }
   const legalPostfix = ['.ts', '.js', '.mjs', '.cjs']
   for (let postfix of legalPostfix) {
     const file = `vifr.config${postfix}`
@@ -71,16 +81,37 @@ export function lookupConfigFile (): string {
 }
 
 export function mergeConfig (
-  defaults: Record<string, any>,
-  overrides: Record<string, any>,
-) {
-  const isProduction = process.env.NODE_ENV === 'production'
-
-}
-
-export function mergePlugins (mode: string = 'development'): PluginOption[] {
-  const plugins = [
-    ...reactPlugin()
-  ]
-  return  plugins
+  inlineConfig: InlineConfig = {},
+  configFile: string
+): ViteInlineConfig {
+  const { plugins = [], server = {}} = inlineConfig
+  const overrideConfig = Object.assign(
+    {},
+    {
+      configFile,
+      plugins: [
+        ...reactPlugin(),
+        ...plugins
+      ]
+    },
+    {
+      server: Object.assign(
+        {},
+        isObject(server) && server,
+        {
+          middlewareMode: 'ssr' as const,
+          watch: Object.assign(
+            {
+              // During tests we edit the files too fast and sometimes chokidar
+              // misses change events, so enforce polling for consistency
+              usePolling: true,
+              interval: 100,
+            },
+            isObject(server?.watch) && server.watch
+          )
+        }
+      )
+    }
+  )
+  return overrideConfig
 }
