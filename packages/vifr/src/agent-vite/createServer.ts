@@ -1,7 +1,7 @@
 import type { ViteDevServer,  Connect} from 'vite'
 import type {InlineConfig} from '../config'
 import path from "path";
-import fsPromise from 'fs/promises'
+// import fsPromise from 'fs/promises'
 import {
   createServer as ViteCreateServer,
   // mergeConfig as ViteMergeConfig,
@@ -36,8 +36,9 @@ export async function createServer (inlineConfig: InlineConfig = {}): Promise<Vi
 
 function createTransformDevHtml (root: string): (url: string) => Promise<string> {
   return async (url: string): Promise<string> => {
-    const content = await fsPromise.readFile(path.resolve(root, 'index.html'), {encoding: 'utf-8'})
-    const template = await viteServer!.transformIndexHtml(url, content)
+    // const content = await fsPromise.readFile(path.resolve(root, 'index.html'), {encoding: 'utf-8'})
+    const template = await viteServer!.transformIndexHtml(url, '')
+    console.log(template)
     return template
   }
 }

@@ -39,7 +39,8 @@ async function createServer(
         html = await vifrDevServer.transformDevHtml(url)
         const {render} = await vifrDevServer.loadSsrEntryModule()
         appHtml = render(url)
-        html = html.replace(`<!--ssr-outlet-->`, appHtml)
+        console.log('appHtml--', appHtml)
+        html = appHtml
       } else {
         const template = fs.readFileSync(resolve('dist/client/index.html'), 'utf-8')
         const render = require('./dist/server/entry-server.js').render

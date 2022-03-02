@@ -1,4 +1,5 @@
 import { Link, Routes, Route } from 'react-router-dom'
+import Html from './Html'
 
 // Auto generates routes from files under ./pages
 // https://vitejs.dev/guide/features.html#glob-import
@@ -16,27 +17,31 @@ import { Link, Routes, Route } from 'react-router-dom'
 export function App() {
   return (
     <>
-      <nav>
-        <ul>
-          <div>app</div>
-          {/*{routes.map(({ name, path }) => {*/}
-          {/*  return (*/}
-          {/*    <li key={path}>*/}
-          {/*      <Link to={path}>{name}</Link>*/}
-          {/*    </li>*/}
-          {/*  )*/}
-          {/*})}*/}
-        </ul>
-      </nav>
-      {/*<Routes>*/}
-      {/*  {routes.map(({ path, component: RouteComp }) => {*/}
-      {/*    return (*/}
-      {/*      <Route key={path} path={path}>*/}
-      {/*        <RouteComp />*/}
-      {/*      </Route>*/}
-      {/*    )*/}
-      {/*  })}*/}
-      {/*</Routes>*/}
+      <Html
+        title="Vifr App"
+      >
+        <nav>
+          <ul>
+            <div>app</div>
+            {/*{routes.map(({ name, path }) => {*/}
+            {/*  return (*/}
+            {/*    <li key={path}>*/}
+            {/*      <Link to={path}>{name}</Link>*/}
+            {/*    </li>*/}
+            {/*  )*/}
+            {/*})}*/}
+          </ul>
+        </nav>
+        {/*<Routes>*/}
+        {/*  {routes.map(({ path, component: RouteComp }) => {*/}
+        {/*    return (*/}
+        {/*      <Route key={path} path={path}>*/}
+        {/*        <RouteComp />*/}
+        {/*      </Route>*/}
+        {/*    )*/}
+        {/*  })}*/}
+        {/*</Routes>*/}
+      </Html>
     </>
   )
 }
