@@ -2,7 +2,7 @@
 const fs = require('fs')
 const path = require('path')
 const express = require('express')
-const {createServer: createVifrServer} = require('vifr')
+const {createVifrServer, createLoadSsrEntryModule, ssrFixStacktrace} = require('vifr')
 
 const isTest = process.env.NODE_ENV === 'test' || !!process.env.VITE_TEST_BUILD
 
@@ -16,11 +16,9 @@ async function createServer(
 
   const app = express()
 
-  let vifrDevServer
-
   if (!isProd) {
-    vifrDevServer = await createVifrServer({logLevel: isTest ? 'error' : 'info'})
-    app.use(vifrDevServer.middlewares)
+    const {middlewares} = await createVifrServer({logLevel: isTest ? 'error' : 'info'})
+    app.use(middlewares)
   } else {
     app.use(require('compression')())
     app.use(
@@ -36,21 +34,17 @@ async function createServer(
 
       let html, appHtml
       if (!isProd) {
-        html = await vifrDevServer.transformDevHtml(url)
-        const {render} = await vifrDevServer.loadSsrEntryModule()
-        appHtml = render(url)
-        console.log('appHtml--', appHtml)
-        html = appHtml
+        const {render} = await createLoadSsrEntryModule()
+        render(url, res)
       } else {
         const template = fs.readFileSync(resolve('dist/client/index.html'), 'utf-8')
         const render = require('./dist/server/entry-server.js').render
         appHtml = render(url)
         html = template.replace(`<!--ssr-outlet-->`, appHtml)
+        res.status(200).set({'Content-Type': 'text/html'}).end(html)
       }
-
-      res.status(200).set({'Content-Type': 'text/html'}).end(html)
     } catch (e) {
-      !isProd && vifrDevServer.ssrFixStacktrace(e)
+      !isProd && ssrFixStacktrace(e)
       console.log(e.stack)
       res.status(500).end(e.stack)
     }

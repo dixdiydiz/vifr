@@ -32,17 +32,17 @@ importers:
     specifiers:
       compression: ^1.7.4
       express: ^4.17.1
-      react: ^17.0.2
-      react-dom: ^17.0.2
+      react: ^18.0.0-rc.1-next-f468816ef-20220225
+      react-dom: ^18.0.0-rc.1-next-f468816ef-20220225
       react-router: ^6.2.1
       react-router-dom: ^6.2.1
       serve-static: ^1.14.1
       vifr: workspace:*
     dependencies:
-      react: 17.0.2
-      react-dom: 17.0.2_react@17.0.2
-      react-router: 6.2.1_react@17.0.2
-      react-router-dom: 6.2.1_react-dom@17.0.2+react@17.0.2
+      react: 18.0.0-rc.1-next-f468816ef-20220225
+      react-dom: 18.0.0-rc.1-next-f468816ef-20220225_a28f1fd517be1d2b056a3673720bd102
+      react-router: 6.2.1_a28f1fd517be1d2b056a3673720bd102
+      react-router-dom: 6.2.1_bcb7dcc2a7fe19b9bd101bda0ea1da4c
     devDependencies:
       compression: 1.7.4
       express: 4.17.3
@@ -1266,11 +1266,6 @@ packages:
     resolution: {integrity: sha512-XxYDdcQ6eKqp/YjI+tb2C5WM2LgjnZrfYg4vgQt49EK268b6gYCHsBLrK2qvJo4FmCtqmKezb0WZFK4fkrZNsg==}
     dev: false
 
-  /object-assign/4.1.1:
-    resolution: {integrity: sha1-IQmtx5ZYh8/AXLvUQsrIv7s2CGM=}
-    engines: {node: '>=0.10.0'}
-    dev: false
-
   /on-finished/2.3.0:
     resolution: {integrity: sha1-IPEzZIGwg811M3mSoWlxqi2QaUc=}
     engines: {node: '>= 0.8'}
@@ -1419,15 +1414,14 @@ packages:
       unpipe: 1.0.0
     dev: true
 
-  /react-dom/17.0.2_react@17.0.2:
-    resolution: {integrity: sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA==}
+  /react-dom/18.0.0-rc.1-next-f468816ef-20220225_a28f1fd517be1d2b056a3673720bd102:
+    resolution: {integrity: sha512-GDr1pMmH6bMjv571SAVdsW9C99zkx5xJ6tG4Mu5vhOBApV2LZkvrAy9eUS1l3W/ZGp6hTrTUzrnKJ2PIA/g00Q==}
     peerDependencies:
-      react: 17.0.2
+      react: 18.0.0-rc.1-next-f468816ef-20220225
     dependencies:
       loose-envify: 1.4.0
-      object-assign: 4.1.1
-      react: 17.0.2
-      scheduler: 0.20.2
+      react: 18.0.0-rc.1-next-f468816ef-20220225
+      scheduler: 0.21.0-rc.1-next-f468816ef-20220225
     dev: false
 
   /react-refresh/0.11.0:
@@ -1435,33 +1429,32 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: false
 
-  /react-router-dom/6.2.1_react-dom@17.0.2+react@17.0.2:
+  /react-router-dom/6.2.1_bcb7dcc2a7fe19b9bd101bda0ea1da4c:
     resolution: {integrity: sha512-I6Zax+/TH/cZMDpj3/4Fl2eaNdcvoxxHoH1tYOREsQ22OKDYofGebrNm6CTPUcvLvZm63NL/vzCYdjf9CUhqmA==}
     peerDependencies:
       react: '>=16.8'
       react-dom: '>=16.8'
     dependencies:
       history: 5.2.0
-      react: 17.0.2
-      react-dom: 17.0.2_react@17.0.2
-      react-router: 6.2.1_react@17.0.2
+      react: 18.0.0-rc.1-next-f468816ef-20220225
+      react-dom: 18.0.0-rc.1-next-f468816ef-20220225_a28f1fd517be1d2b056a3673720bd102
+      react-router: 6.2.1_a28f1fd517be1d2b056a3673720bd102
     dev: false
 
-  /react-router/6.2.1_react@17.0.2:
+  /react-router/6.2.1_a28f1fd517be1d2b056a3673720bd102:
     resolution: {integrity: sha512-2fG0udBtxou9lXtK97eJeET2ki5//UWfQSl1rlJ7quwe6jrktK9FCCc8dQb5QY6jAv3jua8bBQRhhDOM/kVRsg==}
     peerDependencies:
       react: '>=16.8'
     dependencies:
       history: 5.2.0
-      react: 17.0.2
+      react: 18.0.0-rc.1-next-f468816ef-20220225
     dev: false
 
-  /react/17.0.2:
-    resolution: {integrity: sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==}
+  /react/18.0.0-rc.1-next-f468816ef-20220225:
+    resolution: {integrity: sha512-KTEaxCdleZPZtCfxhrSEYHohZRo0W1FWt5s28OsmwpPfIiDaQksoUf5bvMSn4wgfyt1gAM1Ot+wM74s4lTbNtA==}
     engines: {node: '>=0.10.0'}
     dependencies:
       loose-envify: 1.4.0
-      object-assign: 4.1.1
     dev: false
 
   /regenerator-runtime/0.13.9:
@@ -1539,11 +1532,10 @@ packages:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
     dev: true
 
-  /scheduler/0.20.2:
-    resolution: {integrity: sha512-2eWfGgAqqWFGqtdMmcL5zCMK1U8KlXv8SQFGglL3CEtd0aDVDWgeF/YoCmvln55m5zSk3J/20hTaSBeSObsQDQ==}
+  /scheduler/0.21.0-rc.1-next-f468816ef-20220225:
+    resolution: {integrity: sha512-/maKldJ78Ba2o1e9kh2mUpqNZH7XrmSQ1o1aa3HUPN/OMotUB9+pBKX/y3Zihkjco21H4cujG9hK2sJOZUpzJw==}
     dependencies:
       loose-envify: 1.4.0
-      object-assign: 4.1.1
     dev: false
 
   /semver/6.3.0:

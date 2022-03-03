@@ -1,10 +1,10 @@
-import ReactDOM from 'react-dom'
+import {hydrateRoot} from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
-import { App } from './App'
+import {App} from './App';
 
-ReactDOM.hydrate(
+hydrateRoot(
+  document,
   <BrowserRouter>
     <App />
-  </BrowserRouter>,
-  document.getElementById('app')
-)
+  </BrowserRouter>
+);
