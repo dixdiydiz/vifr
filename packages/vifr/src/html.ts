@@ -36,7 +36,7 @@ export function injectHtmlToApp ():Plugin {
       const codeMatcher = documentRE.exec(code)
       const transformMatcher = documentRE.exec(transformHtml)
       if (!codeMatcher || !transformMatcher) {
-        return null
+        return
       }
       for (let i =1; i < codeMatcher.length; i++) {
         const target = codeMatcher[i]

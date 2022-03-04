@@ -32,15 +32,13 @@ async function createServer(
     try {
       const url = req.originalUrl
 
-      let html, appHtml
+      let html
       if (!isProd) {
         const {render} = await createLoadSsrEntryModule()
         render(url, res)
       } else {
-        const template = fs.readFileSync(resolve('dist/client/index.html'), 'utf-8')
         const render = require('./dist/server/entry-server.js').render
-        appHtml = render(url)
-        html = template.replace(`<!--ssr-outlet-->`, appHtml)
+        html = render(url)
         res.status(200).set({'Content-Type': 'text/html'}).end(html)
       }
     } catch (e) {
