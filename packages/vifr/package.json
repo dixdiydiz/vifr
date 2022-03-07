@@ -21,6 +21,10 @@
     "magic-string": "^0.26.1",
     "vite": "^2.8.4"
   },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": "^>=18"
+  },
   "packageManager": "pnpm@6.32.2",
   "engines": {
     "node": ">=16"
