@@ -27,20 +27,13 @@ function licensePlugin (libraryName) {
 
 
 /**
- * @type {import('rollup').RollupOptions}
+ * @type {import('rollup').RollupOptions[]}
  */
 function vifr () {
   const SOURCE_DIR = "packages/vifr"
   const OUTPUT_DIR = "packages/vifr/dist"
-  return {
+  const config = {
     external: [/node_modules/],
-    input: [`${SOURCE_DIR}/src/cli.ts`, `${SOURCE_DIR}/src/index.ts`],
-    output: {
-      dir: OUTPUT_DIR,
-      format: 'cjs',
-      entryFileNames: `[name].js`,
-      exports: "named",
-    },
     plugins: [
       nodeResolve({ extensions: [ '.ts'], }),
       commonjs(),
@@ -51,6 +44,27 @@ function vifr () {
       licensePlugin('vifr'),
     ]
   }
+  return [
+    {
+      input: [`${SOURCE_DIR}/src/cli.ts`, `${SOURCE_DIR}/src/index.ts`],
+      output: {
+        dir: OUTPUT_DIR,
+        format: 'cjs',
+        entryFileNames: `[name].js`,
+        exports: "named",
+      },
+      ...config,
+    }, {
+      input: [`${SOURCE_DIR}/src/react/index.ts`],
+      output: {
+        dir: `${OUTPUT_DIR}/react`,
+        format: 'es',
+        entryFileNames: `[name].js`,
+        exports: "named",
+      },
+      ...config,
+    }
+  ]
 }
 
 
