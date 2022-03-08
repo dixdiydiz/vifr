@@ -1,28 +1,20 @@
-import type {Plugin, ViteDevServer} from 'vite'
+import type {Plugin, ViteDevServer, IndexHtmlTransformResult} from 'vite'
+import type {Options} from '@vitejs/plugin-react'
+import reactPlugin from '@vitejs/plugin-react'
 
 
-// const htmlStartRE = /([ \t]*)<html[^>]*>/i
-// const htmlEndRE = /<\/html>/i
-//
-// const headStartRE = /([ \t]*)<head[^>]*>/i
-// const headEndRE = /([ \t]*)<\/head>/i
-//
-// const bodyStartRE = /([ \t]*)<body[^>]*>/i
-// const bodyEndRE = /([ \t]*)<\/body>/i
+// copy from vite
+export const CLIENT_PUBLIC_PATH = `/@vite/client`
 
-// replace html string
-const documentRE = /(?:[ \t]*)<html[^>]*>(.*)(?:[ \t]*)<head[^>]*>(.*)(?:[ \t]*)<\/head>.*(?:[ \t]*)<body[^>]*>(.*)(?:[ \t]*)<\/body>(.*)<\/html>/i
-enum htmlReplaceSign {
-  __VIFR_PRE_HTML = 1,
-  __VIFR_HEAD = 2,
-  __VIFR_BODY =3,
-  __VIFR_POST_HTML = 4
+const preambleCode = reactPlugin.preambleCode
+
+export async function createReactPlugin (options: Options = {}) {
+  const filterPlugins = reactPlugin(options).filter(Boolean).map(plugin => {
+    if (Reflect.has(plugin as object, 'transformIndexHtml')) {
+      const transformResult = (plugin as Plugin).transformIndexHtml!()
+    }
+  })
 }
-export const originalHtml = `<html>${htmlReplaceSign[1]}<head>${htmlReplaceSign[2]}</head><body>${htmlReplaceSign[2]}</body>${htmlReplaceSign[2]}</html>`
-
-
-let transformHtml: string = ''
-
 export async function createTransformHtml (root: string, server: ViteDevServer): Promise<string> {
   transformHtml = await server.transformIndexHtml('', originalHtml)
   return transformHtml
@@ -32,6 +24,9 @@ export function injectHtmlToApp ():Plugin {
   return {
     name: 'vifr:inject-html-to-app',
     transform (code, id) {
+      if (/Html.jsx$/.test(id)) {
+        console.log(code)
+      }
       let injectCode = code
       const codeMatcher = documentRE.exec(code)
       const transformMatcher = documentRE.exec(transformHtml)
@@ -50,3 +45,7 @@ export function injectHtmlToApp ():Plugin {
     }
   }
 }
+
+// because there was no index.html, so should extract transformIndexHtml hook.
+const CLIENT_PUBLIC_PATH = `/@vite/client`
+

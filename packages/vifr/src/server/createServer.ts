@@ -6,7 +6,7 @@ import {
   // mergeConfig as ViteMergeConfig,
 } from 'vite'
 import {resolveConfig} from '../config'
-import {createTransformHtml} from "../html";
+import {createTransformHtml} from "./html";
 
 export {ViteDevServer, InlineConfig }
 
