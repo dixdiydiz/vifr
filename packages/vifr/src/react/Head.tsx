@@ -1,7 +1,4 @@
-
-
-// copy from vite
-const CLIENT_PUBLIC_PATH = `/@vite/client`
+import {CLIENT_PUBLIC_PATH} from '../constants'
 
 export function Head() {
   return (

@@ -6,7 +6,6 @@ import {
   // mergeConfig as ViteMergeConfig,
 } from 'vite'
 import {resolveConfig} from '../config'
-import {createTransformHtml} from "./html";
 
 export {ViteDevServer, InlineConfig }
 
@@ -21,8 +20,8 @@ export async function createVifrServer (inlineConfig: InlineConfig = {}): Promis
   const { overrideConfig } = await resolveConfig(inlineConfig, 'serve', mode)
   const {root = process.cwd()} = inlineConfig
   viteServer = await ViteCreateServer(overrideConfig)
-  await createTransformHtml(root, viteServer)
-
+  // await createTransformHtml(root, viteServer)
+  console.log(root)
   return {
     middlewares: viteServer.middlewares,
   }

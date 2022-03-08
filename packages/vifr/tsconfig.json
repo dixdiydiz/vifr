@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "outDir": "dist",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "module": "ESNext",
     "target": "ESNext",
+    "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "moduleResolution": "node",
     "strict": true,
@@ -14,7 +15,7 @@
     "declaration": true,
     "declarationMap": false,
     "declarationDir": "dist/types",
+    "jsx": "react-jsx",
     "types": ["node"]
   },
-  "include": ["src/**/*.ts", "types/**/*.ts"]
 }

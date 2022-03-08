@@ -254,3 +254,5 @@
 // cli.version(require('../package.json').version)
 //
 // cli.parse()
+
+export const test =1

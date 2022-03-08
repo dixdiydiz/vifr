@@ -7,4 +7,4 @@ export const CLIENT_PUBLIC_PATH = `/@vite/client`
 /**
  * @description vifr virtural module
  */
-export const CLIENT_PUBLIC_PATH = `/@vifr-virtual-refresh`
+export const VIRTUAL_REFRESH = `/@vifr-virtual-refresh`

@@ -9,7 +9,6 @@ import path from 'path'
 import colors from 'picocolors'
 // import debug from 'debug'
 import {createLogger, resolveConfig as ViteResolveConfig} from 'vite'
-import {injectHtmlToApp} from './server/html'
 import {isObject} from './utils'
 
 export interface InlineConfig extends ViteInlineConfig {
@@ -90,8 +89,6 @@ export function mergeConfig (
     {
       configFile,
       plugins: [
-        ...reactPlugin(),
-        injectHtmlToApp(),
         ...plugins
       ]
     },
