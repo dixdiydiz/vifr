@@ -3,12 +3,14 @@ import type {
   ServerOptions as ViteServerOptions,
   UserConfig as ViteUserConfig,
   ResolvedConfig as ViteResolvedConfig,
+  Plugin,
 } from 'vite'
 import fs from 'fs'
 import path from 'path'
 import colors from 'picocolors'
 // import debug from 'debug'
 import {createLogger, resolveConfig as ViteResolveConfig} from 'vite'
+import {createReactPlugin} from './server/transformIndexHtml'
 import {isObject} from './utils'
 
 export interface InlineConfig extends ViteInlineConfig {
@@ -43,7 +45,8 @@ export async function resolveConfig (
   let {configFile = null} = inlineConfig
   configFile = lookupConfigFile(configFile)
   const viteResolvedConfig = await ViteResolveConfig({configFile}, command)
-  const overrideConfig = mergeConfig(inlineConfig, configFile)
+  const reactPlugins = await createReactPlugin()
+  const overrideConfig = mergeConfig(inlineConfig, configFile, reactPlugins as Plugin[])
   return {
     viteResolvedConfig,
     overrideConfig,
@@ -79,16 +82,18 @@ export function lookupConfigFile (configFile?: string | null | false): string {
   throw err
 }
 
-export function mergeConfig (
+function mergeConfig (
   inlineConfig: InlineConfig = {},
-  configFile: string
+  configFile: string,
+  plugins: Plugin[]
 ): ViteInlineConfig {
-  const { plugins = [], server = {}} = inlineConfig
+  const { plugins: inlinePlugins = [], server = {}} = inlineConfig
   const overrideConfig = Object.assign(
     {},
     {
       configFile,
       plugins: [
+        ...inlinePlugins,
         ...plugins
       ]
     },

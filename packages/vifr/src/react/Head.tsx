@@ -1,9 +1,11 @@
-import {CLIENT_PUBLIC_PATH} from '../constants'
+// @ts-ignore
+import Script from '@vifr-virtual-head'
+
 
 export function Head() {
   return (
     <>
-      <script type="module" src={CLIENT_PUBLIC_PATH} />
+      <Script />
     </>
   )
 }

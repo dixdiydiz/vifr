@@ -1,29 +1,41 @@
-import type {Plugin, ViteDevServer, HtmlTagDescriptor} from 'vite'
+import type {Plugin, HtmlTagDescriptor, IndexHtmlTransformHook} from 'vite'
 import type {Options} from '@vitejs/plugin-react'
 import reactPlugin from '@vitejs/plugin-react'
-import {isString} from "../utils";
+import {CLIENT_PUBLIC_PATH} from '../constants'
+import {isFunction, isString} from "../utils"
 
-
-const unaryTags = new Set(['link', 'meta', 'base'])
 
 export let reactRefreshHead = ''
+
+
+function viteClientScript () {
+  return `<script type="module" src={${CLIENT_PUBLIC_PATH}} />`
+}
+let transformIndexHtmlHooks: IndexHtmlTransformHook[] = [viteClientScript]
 
 
 /**
  * every request should call once
  */
-export async function transformIndexHtml (root: string, server: ViteDevServer): Promise<string> {
-  const transformHtml = await server.transformIndexHtml('', '')
-  return transformHtml
+export async function transformIndexHtmlScript (): Promise<string> {
+  let res = ''
+  for (let hook of transformIndexHtmlHooks) {
+    // @ts-ignore no params
+    const hookRes = hook()
+    // @ts-ignore
+    res += isString(hookRes) ? hookRes : serializeTag(hookRes)
+  }
+  return res
 }
 
 export async function createReactPlugin (options: Options = {}): Promise<(Plugin|void)[]> {
-  const filterPlugins = reactPlugin(options).filter(Boolean).map( async plugin => {
-    if (Reflect.has(plugin as object, 'transformIndexHtml')) {
-      const hook = (plugin as Plugin)?.transformIndexHtml
-      const res =  await (hook as Function)()
-      reactRefreshHead = isString(res) ? res : serializeTag(res)
-      Reflect.deleteProperty(plugin as object, 'transformIndexHtml')
+  const filterPlugins = (reactPlugin(options).filter(Boolean) as Plugin[]).map( async plugin => {
+    if (Reflect.has(plugin, 'transformIndexHtml')) {
+      const hook = plugin.transformIndexHtml
+      if (isFunction(hook)) {
+        transformIndexHtmlHooks.push(hook)
+      }
+      Reflect.deleteProperty(plugin, 'transformIndexHtml')
     }
   })
   return await Promise.all(filterPlugins)
@@ -33,14 +45,10 @@ function serializeTag(
   { tag, attrs, children }: HtmlTagDescriptor,
   indent: string = ''
 ): string {
-  if (unaryTags.has(tag)) {
-    return `<${tag}${serializeAttrs(attrs)}>`
-  } else {
-    return `<${tag}${serializeAttrs(attrs)}>${serializeTags(
-      children,
-      incrementIndent(indent)
-    )}</${tag}>`
-  }
+  return `<${tag}${serializeAttrs(attrs)}>${serializeTags(
+    children,
+    incrementIndent(indent)
+  )}</${tag}>`
 }
 
 function incrementIndent(indent: string = '') {

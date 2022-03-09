@@ -3,9 +3,9 @@ import type {InlineConfig} from '../config'
 import path from "path";
 import {
   createServer as ViteCreateServer,
-  // mergeConfig as ViteMergeConfig,
 } from 'vite'
 import {resolveConfig} from '../config'
+// import {transformIndexHtmlScript} from './transformIndexHtml'
 
 export {ViteDevServer, InlineConfig }
 
@@ -18,10 +18,8 @@ let viteServer: ViteDevServer | null = null
 export async function createVifrServer (inlineConfig: InlineConfig = {}): Promise<VifrDevServer> {
   const mode = 'development'
   const { overrideConfig } = await resolveConfig(inlineConfig, 'serve', mode)
-  const {root = process.cwd()} = inlineConfig
   viteServer = await ViteCreateServer(overrideConfig)
   // await createTransformHtml(root, viteServer)
-  console.log(root)
   return {
     middlewares: viteServer.middlewares,
   }
