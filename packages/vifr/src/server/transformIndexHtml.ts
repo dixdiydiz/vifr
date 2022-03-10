@@ -21,7 +21,7 @@ export async function transformIndexHtmlScript (): Promise<string> {
   let res = ''
   for (let hook of transformIndexHtmlHooks) {
     // @ts-ignore no params
-    const hookRes = hook()
+    const hookRes =  await hook()
     // @ts-ignore
     res += isString(hookRes) ? hookRes : serializeTag(hookRes)
   }

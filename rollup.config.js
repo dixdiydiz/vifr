@@ -70,7 +70,7 @@ function vifrReact () {
   const VIFR_DIR = "packages/vifr"
   const SOURCE_DIR = `${VIFR_DIR}/src/react`
   const OUTPUT_DIR = `${VIFR_DIR}/dist/react`
-  const virtualExternals = [/@vifr-virtual-head/]
+  const virtualModuleReg = /@vifr-virtual/
   return [
     {
       input: [`${SOURCE_DIR}/index.ts`],
@@ -80,7 +80,7 @@ function vifrReact () {
         exports: "named",
         format: 'es',
       },
-      external: [/node_modules/, /@babel\/runtime/, /^react/, ...virtualExternals],
+      external: [/node_modules/, /@babel\/runtime/, /^react/, virtualModuleReg],
       plugins: [
         nodeResolve({ extensions: [ '.ts', '.tsx'], }),
         commonjs(),
