@@ -10,6 +10,7 @@ import path from 'path'
 import colors from 'picocolors'
 // import debug from 'debug'
 import {createLogger, resolveConfig as ViteResolveConfig} from 'vite'
+import {virtualHeadPlugin} from './plugins/virtual-module'
 import {createReactPlugin} from './server/transformIndexHtml'
 import {isObject} from './utils'
 
@@ -94,7 +95,8 @@ function mergeConfig (
       configFile,
       plugins: [
         ...inlinePlugins,
-        ...plugins
+        ...plugins,
+        virtualHeadPlugin(),
       ]
     },
     {

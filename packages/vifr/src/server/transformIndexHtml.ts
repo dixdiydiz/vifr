@@ -2,7 +2,7 @@ import type {Plugin, HtmlTagDescriptor, IndexHtmlTransformHook} from 'vite'
 import type {Options} from '@vitejs/plugin-react'
 import reactPlugin from '@vitejs/plugin-react'
 import {CLIENT_PUBLIC_PATH} from '../constants'
-import {isFunction, isString} from "../utils"
+import {isArray, isFunction, isString} from "../utils"
 
 
 export let reactRefreshHead = ''
@@ -37,18 +37,25 @@ export async function createReactPlugin (options: Options = {}): Promise<(Plugin
       }
       Reflect.deleteProperty(plugin, 'transformIndexHtml')
     }
+    return plugin
   })
   return await Promise.all(filterPlugins)
 }
 
 function serializeTag(
-  { tag, attrs, children }: HtmlTagDescriptor,
+  htmlTagDescriptor: HtmlTagDescriptor | HtmlTagDescriptor[],
   indent: string = ''
 ): string {
-  return `<${tag}${serializeAttrs(attrs)}>${serializeTags(
-    children,
-    incrementIndent(indent)
-  )}</${tag}>`
+  let res = ''
+  htmlTagDescriptor = isArray(htmlTagDescriptor) ?  htmlTagDescriptor : [htmlTagDescriptor]
+  for (let descriptor of htmlTagDescriptor ) {
+    const { tag, attrs, children } = descriptor
+    res += `<${tag}${serializeAttrs(attrs)}>${serializeTags(
+      children,
+      incrementIndent(indent)
+    )}</${tag}>`
+  }
+  return res
 }
 
 function incrementIndent(indent: string = '') {
