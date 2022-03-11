@@ -1,14 +1,15 @@
 import {Head} from 'vifr/react'
+// import head from '@vifr-virtual-head'
 
 export default function Html({ children, title }) {
   return (
     <>
       <html lang="en">
       <head>
+        <Head />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="shortcut icon" href="favicon.ico" />
-        <Head />
         <title>{title}</title>
       </head>
       <body>
@@ -18,11 +19,7 @@ export default function Html({ children, title }) {
         }}
       />
       {children}
-      {/*<script*/}
-      {/*  dangerouslySetInnerHTML={{*/}
-      {/*    __html: `assetManifest = ${JSON.stringify(assets)};`*/}
-      {/*  }}*/}
-      {/*/>*/}
+      <div>234</div>
       </body>
       </html>
     </>

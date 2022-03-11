@@ -35,7 +35,6 @@ async function createServer(
       let html
       if (!isProd) {
         const {render} = await createLoadSsrEntryModule(url)
-        console.log('render---', render)
         render(url, res)
       } else {
         const render = require('./dist/server/entry-server.js').render

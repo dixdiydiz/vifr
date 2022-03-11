@@ -76,7 +76,7 @@ function serializeHead (html: string): string {
   let transformHtml = html
   for (let mark of stack) {
     const {openTagStr, text, fullStr}  = mark
-    transformHtml = transformHtml.replace(fullStr, text ? `${openTagStr} dangerouslySetInnerHTML={{__html: "${text}"}} />` : `${openTagStr} />`)
+    transformHtml = transformHtml.replace(fullStr, text ? `${openTagStr} dangerouslySetInnerHTML={{__html: '${text.replace(/\n/g, '<br />')}'}} />` : `${openTagStr} />`)
   }
 
   headCache.contentMap = [html, transformHtml]
