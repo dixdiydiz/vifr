@@ -5,7 +5,7 @@ import {
   createServer as ViteCreateServer,
 } from 'vite'
 import {resolveConfig} from '../config'
-// import {transformIndexHtmlScript} from './transformIndexHtml'
+import {transformIndexHtml} from './transformIndexHtml'
 
 export {ViteDevServer, InlineConfig }
 
@@ -19,16 +19,21 @@ export async function createVifrServer (inlineConfig: InlineConfig = {}): Promis
   const mode = 'development'
   const { overrideConfig } = await resolveConfig(inlineConfig, 'serve', mode)
   viteServer = await ViteCreateServer(overrideConfig)
-  // await createTransformHtml(root, viteServer)
   return {
     middlewares: viteServer.middlewares,
   }
 }
 
-export async function createLoadSsrEntryModule (root: string = process.cwd()): Promise<Record<string, any>> {
-  return await viteServer!.ssrLoadModule(path.resolve(root, 'src/entry-server.jsx'))
+export async function ssrTransformIndexHtml (url: string, template: string) {
+  return  await viteServer!.transformIndexHtml(url, template)
+}
+
+export async function createLoadSsrEntryModule (url: string, root: string = process.cwd()): Promise<Record<string, any>> {
+  await transformIndexHtml(url)
+  const render =  await viteServer!.ssrLoadModule(path.resolve(root, 'src/entry-server.jsx'))
+  return  render
 }
 
 export function ssrFixStacktrace ( e: Error): void {
-  return viteServer?.ssrFixStacktrace(e)
+  return viteServer!.ssrFixStacktrace(e)
 }

@@ -1,88 +1,96 @@
-import type {Plugin, HtmlTagDescriptor, IndexHtmlTransformHook} from 'vite'
-import type {Options} from '@vitejs/plugin-react'
-import reactPlugin from '@vitejs/plugin-react'
-import {CLIENT_PUBLIC_PATH} from '../constants'
-import {isArray, isFunction, isString} from "../utils"
+// import type { Plugin, } from 'vite'
+import htmlparser from 'htmlparser2'
+import {ssrTransformIndexHtml}from './createServer'
+import {isArray} from "../utils";
 
 
-export let reactRefreshHead = ''
-
-
-function viteClientScript () {
-  return `<script type="module" src={${CLIENT_PUBLIC_PATH}} />`
+interface TransformIndexHtmlDescriptor {
+  head: string
+  body: string
 }
-let transformIndexHtmlHooks: IndexHtmlTransformHook[] = [viteClientScript]
+
+interface MarkTag {
+  openStartIndex: number
+  openEndIndex: number
+  closeEndIndex: number
+  text: string
+  openTagStr: string
+  fullStr: string
+}
+
+const template = '<html><head></head></html>'
+const htmlRE = /<html>[^]*<head>([^]*)<\/head>[^]*<\/html>/i
+
+export const headCache: Record<string, any> = Object.defineProperties({
+  content: ''
+}, {
+  contentMap: {
+    set (arr: string[]) {
+      const [key, val] = arr
+      this.content = this[key] = val
+    }
+  }
+})
 
 
-/**
- * every request should call once
- */
-export async function transformIndexHtmlScript (): Promise<string> {
-  let res = ''
-  for (let hook of transformIndexHtmlHooks) {
-    // @ts-ignore no params
-    const hookRes =  await hook()
-    // @ts-ignore
-    res += isString(hookRes) ? hookRes : serializeTag(hookRes)
+export async function transformIndexHtml (url: string): Promise<TransformIndexHtmlDescriptor> {
+  let res = {head: '', body: ''}
+  const html = await ssrTransformIndexHtml(url, template)
+  const matcher = htmlRE.exec(html)
+  if (isArray(matcher)) {
+    const [_, head] = matcher
+    res.head = headCache[head] ?? serializeHead(head)
   }
   return res
 }
 
-export async function createReactPlugin (options: Options = {}): Promise<(Plugin|void)[]> {
-  const filterPlugins = (reactPlugin(options).filter(Boolean) as Plugin[]).map( async plugin => {
-    if (Reflect.has(plugin, 'transformIndexHtml')) {
-      const hook = plugin.transformIndexHtml
-      if (isFunction(hook)) {
-        transformIndexHtmlHooks.push(hook)
+function serializeHead (html: string): string {
+  let isScriptTag: boolean = false
+  let stackIndex = -1
+  let stack: MarkTag[] = []
+  const parser = new htmlparser.Parser({
+    onopentag(name) {
+      if (name === 'script') {
+        isScriptTag = true
+        stack[++stackIndex] = markTag(parser.startIndex, parser.endIndex)
       }
-      Reflect.deleteProperty(plugin, 'transformIndexHtml')
+    },
+    ontext (text) {
+      if (isScriptTag) {
+        stack[stackIndex].text = text
+      }
+    },
+    onclosetag(name: string) {
+      if (name === 'script') {
+        const {openStartIndex, openEndIndex} = stack[stackIndex]
+        const closeEndIndex = parser.endIndex
+        stack[stackIndex].closeEndIndex = closeEndIndex
+        stack[stackIndex].openTagStr = html.substring(openStartIndex, openEndIndex)
+        stack[stackIndex].fullStr = html.substring(openStartIndex, closeEndIndex+1)
+        isScriptTag = false
+      }
     }
-    return plugin
   })
-  return await Promise.all(filterPlugins)
-}
-
-function serializeTag(
-  htmlTagDescriptor: HtmlTagDescriptor | HtmlTagDescriptor[],
-  indent: string = ''
-): string {
-  let res = ''
-  htmlTagDescriptor = isArray(htmlTagDescriptor) ?  htmlTagDescriptor : [htmlTagDescriptor]
-  for (let descriptor of htmlTagDescriptor ) {
-    const { tag, attrs, children } = descriptor
-    res += `<${tag}${serializeAttrs(attrs)}>${serializeTags(
-      children,
-      incrementIndent(indent)
-    )}</${tag}>`
+  parser.write(html)
+  parser.end()
+  let transformHtml = html
+  for (let mark of stack) {
+    const {openTagStr, text, fullStr}  = mark
+    transformHtml = transformHtml.replace(fullStr, text ? `${openTagStr} dangerouslySetInnerHTML={{__html: "${text}"}} />` : `${openTagStr} />`)
   }
-  return res
+
+  headCache.contentMap = [html, transformHtml]
+
+  return transformHtml
 }
 
-function incrementIndent(indent: string = '') {
-  return `${indent}${indent[0] === '\t' ? '\t' : '  '}`
-}
-
-function serializeTags(
-  tags: HtmlTagDescriptor['children'],
-  indent: string = ''
-): string {
-  if (typeof tags === 'string') {
-    return tags
-  } else if (tags && tags.length) {
-    return tags.map((tag) => `${indent}${serializeTag(tag, indent)}\n`).join('')
+function markTag (openStartIndex: number, openEndIndex: number): MarkTag {
+  return {
+    openStartIndex,
+    openEndIndex,
+    closeEndIndex: -1,
+    text: '',
+    openTagStr: '',
+    fullStr: ''
   }
-  return ''
 }
-
-function serializeAttrs(attrs: HtmlTagDescriptor['attrs']): string {
-  let res = ''
-  for (const key in attrs) {
-    if (typeof attrs[key] === 'boolean') {
-      res += attrs[key] ? ` ${key}` : ``
-    } else {
-      res += ` ${key}=${JSON.stringify(attrs[key])}`
-    }
-  }
-  return res
-}
-

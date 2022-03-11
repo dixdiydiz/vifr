@@ -1,4 +1,4 @@
-import {transformIndexHtmlScript} from '../server/transformIndexHtml'
+import {headCache} from '../server/transformIndexHtml'
 
 export  function virtualHeadPlugin() {
   const virtualModuleId = '@vifr-virtual-head'
@@ -12,7 +12,7 @@ export  function virtualHeadPlugin() {
     },
     async load(id: string) {
       if (id === resolvedVirtualModuleId) {
-        const str = await transformIndexHtmlScript()
+        const str = headCache.content
         const res =  `export default function () {return (<>${str}</>)}`
       return res
       }
@@ -20,3 +20,4 @@ export  function virtualHeadPlugin() {
     }
   }
 }
+
