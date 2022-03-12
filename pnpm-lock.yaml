@@ -88,9 +88,6 @@ importers:
       debug: 4.3.3
       picocolors: 1.0.0
 
-  packages/vifr/dist/react:
-    specifiers: {}
-
   packages/vifr/src/react:
     specifiers: {}
 

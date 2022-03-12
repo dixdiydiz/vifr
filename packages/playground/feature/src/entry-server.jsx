@@ -9,7 +9,7 @@ export function render(url, res) {
       <App />
     </StaticRouter>,
     {
-      bootstrapScripts: ['src/entry-client.jsx'],
+      bootstrapScriptContent: 'window.BOOT ? BOOT() : (window.LOADED = true)',
       onCompleteShell() {
         // If something errored before we started streaming, we set the error code appropriately.
         res.statusCode = didError ? 500 : 200;

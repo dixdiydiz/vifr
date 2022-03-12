@@ -18,7 +18,7 @@ interface MarkTag {
   fullStr: string
 }
 
-const template = '<html><head></head></html>'
+const EntryTemplate = '<html><head><script type="module" src="/src/entry-client.jsx"></script></head></html>'
 const htmlRE = /<html>[^]*<head>([^]*)<\/head>[^]*<\/html>/i
 
 export const headCache: Record<string, any> = Object.defineProperties({
@@ -35,7 +35,7 @@ export const headCache: Record<string, any> = Object.defineProperties({
 
 export async function transformIndexHtml (url: string): Promise<TransformIndexHtmlDescriptor> {
   let res = {head: '', body: ''}
-  const html = await ssrTransformIndexHtml(url, template)
+  const html = await ssrTransformIndexHtml(url, EntryTemplate)
   const matcher = htmlRE.exec(html)
   if (isArray(matcher)) {
     const [_, head] = matcher
@@ -76,7 +76,7 @@ function serializeHead (html: string): string {
   let transformHtml = html
   for (let mark of stack) {
     const {openTagStr, text, fullStr}  = mark
-    transformHtml = transformHtml.replace(fullStr, text ? `${openTagStr} dangerouslySetInnerHTML={{__html: '${text.replace(/\n/g, '<br />')}'}} />` : `${openTagStr} />`)
+    transformHtml = transformHtml.replace(fullStr, text ? `${openTagStr} dangerouslySetInnerHTML={{__html: '${text.replace(/\n/g, ';')}'}} />` : `${openTagStr} />`)
   }
 
   headCache.contentMap = [html, transformHtml]
