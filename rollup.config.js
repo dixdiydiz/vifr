@@ -2,14 +2,14 @@ import license from 'rollup-plugin-license'
 import copy from 'rollup-plugin-copy'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
-import typescript from 'rollup-plugin-typescript2';
-import { babel } from '@rollup/plugin-babel';
+import typescript from 'rollup-plugin-typescript2'
+import { babel } from '@rollup/plugin-babel'
 
 function getVersion(sourceDir) {
-  return require(`./${sourceDir}/package.json`).version;
+  return require(`./${sourceDir}/package.json`).version
 }
 
-function licensePlugin (libraryName) {
+function licensePlugin(libraryName) {
   const licenseText =
     `/**` +
     ` \n * ${libraryName} is released under the MIT license found in the` +
@@ -22,18 +22,17 @@ function licensePlugin (libraryName) {
       content: licenseText
     },
     thirdParty: {
-      includePrivate: true,
+      includePrivate: true
     }
   })
 }
 
-
 /**
  * @type {import('rollup').RollupOptions[]}
  */
-function vifr () {
-  const SOURCE_DIR = "packages/vifr"
-  const OUTPUT_DIR = "packages/vifr/dist"
+function vifr() {
+  const SOURCE_DIR = 'packages/vifr'
+  const OUTPUT_DIR = 'packages/vifr/dist'
   return [
     {
       input: [`${SOURCE_DIR}/src/cli.ts`, `${SOURCE_DIR}/src/index.ts`],
@@ -41,11 +40,11 @@ function vifr () {
         dir: OUTPUT_DIR,
         format: 'cjs',
         entryFileNames: `[name].js`,
-        exports: "named",
+        exports: 'named'
       },
       external: [/node_modules/],
       plugins: [
-        nodeResolve({ extensions: [ '.ts', '.tsx'], }),
+        nodeResolve({ extensions: ['.ts', '.tsx'] }),
         commonjs(),
         typescript({
           tsconfig: `${SOURCE_DIR}/tsconfig.json`,
@@ -57,8 +56,8 @@ function vifr () {
             }
           }
         }),
-        licensePlugin('vifr'),
-      ],
+        licensePlugin('vifr')
+      ]
     }
   ]
 }
@@ -66,8 +65,8 @@ function vifr () {
 /**
  * @type {import('rollup').RollupOptions[]}
  */
-function vifrReact () {
-  const VIFR_DIR = "packages/vifr"
+function vifrReact() {
+  const VIFR_DIR = 'packages/vifr'
   const SOURCE_DIR = `${VIFR_DIR}/src/react`
   const OUTPUT_DIR = `${VIFR_DIR}/dist/react`
   const virtualModuleReg = /@vifr-virtual/
@@ -77,12 +76,12 @@ function vifrReact () {
       output: {
         dir: OUTPUT_DIR,
         entryFileNames: `[name].js`,
-        exports: "named",
-        format: 'es',
+        exports: 'named',
+        format: 'es'
       },
       external: [/node_modules/, /@babel\/runtime/, /^react/, virtualModuleReg],
       plugins: [
-        nodeResolve({ extensions: [ '.ts', '.tsx'], }),
+        nodeResolve({ extensions: ['.ts', '.tsx'] }),
         commonjs(),
         typescript({
           tsconfig: `${VIFR_DIR}/tsconfig.json`,
@@ -94,28 +93,23 @@ function vifrReact () {
           }
         }),
         babel({
-          babelHelpers: "runtime",
+          babelHelpers: 'runtime',
           exclude: /node_modules/,
-          presets: [['@babel/preset-react', {runtime: 'automatic',}]],
+          presets: [['@babel/preset-react', { runtime: 'automatic' }]],
           extensions: ['.ts', '.tsx'],
-          plugins: [
-            "@babel/plugin-transform-runtime"
-          ]
+          plugins: ['@babel/plugin-transform-runtime']
         }),
         copy({
-          targets: [{src: `${SOURCE_DIR}/package.json`, dest: `${OUTPUT_DIR}`}]
+          targets: [
+            { src: `${SOURCE_DIR}/package.json`, dest: `${OUTPUT_DIR}` }
+          ]
         }),
-        licensePlugin('vifr'),
-      ],
+        licensePlugin('vifr')
+      ]
     }
   ]
 }
 
-
-
-export default commandLineArgs => {
-  return [
-    ...vifr(commandLineArgs),
-    ...vifrReact(commandLineArgs)
-  ];
+export default (commandLineArgs) => {
+  return [...vifr(commandLineArgs), ...vifrReact(commandLineArgs)]
 }

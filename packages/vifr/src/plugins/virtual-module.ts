@@ -1,7 +1,7 @@
-import {transformAsync} from '@babel/core'
-import {headCache} from '../server/transformIndexHtml'
+import { transformAsync } from '@babel/core'
+import { headCache } from '../server/transformIndexHtml'
 
-export  function virtualHeadPlugin() {
+export function virtualHeadPlugin() {
   const virtualModuleId = '@vifr-virtual-head'
   const resolvedVirtualModuleId = '\0' + virtualModuleId
   return {
@@ -13,11 +13,16 @@ export  function virtualHeadPlugin() {
       if (id === resolvedVirtualModuleId) {
         const jsx = `export default () => (<>${headCache.content}</>)`
         const res = await transformAsync(jsx, {
-          plugins: [[await loadPlugin('@babel/plugin-transform-react-jsx'), {
-            "runtime": "automatic"
-          }]]
+          plugins: [
+            [
+              await loadPlugin('@babel/plugin-transform-react-jsx'),
+              {
+                runtime: 'automatic'
+              }
+            ]
+          ]
         })
-      return res?.code ?? ''
+        return res?.code ?? ''
       }
       return null
     }

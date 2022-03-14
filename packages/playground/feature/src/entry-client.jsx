@@ -1,11 +1,13 @@
-import {hydrateRoot} from 'react-dom'
+import { hydrateRoot } from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
-import {App} from './App';
+import { App } from './App'
 
-window.BOOT = function() {
-  hydrateRoot(document,
+window.BOOT = function () {
+  hydrateRoot(
+    document,
     <BrowserRouter>
       <App />
-    </BrowserRouter>);
+    </BrowserRouter>
+  )
 }
-if (window.LOADED) window.BOOT();
+if (window.LOADED) window.BOOT()

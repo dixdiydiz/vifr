@@ -7,7 +7,7 @@
 // https://github.com/vitejs/vite/issues/6215
 module.exports = {
   optimizeDeps: {
-    include:  ['react/jsx-runtime']
+    include: ['react/jsx-runtime']
   },
   plugins: [],
   build: {

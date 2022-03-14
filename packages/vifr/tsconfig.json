@@ -17,5 +17,5 @@
     "declarationDir": "dist/types",
     "jsx": "react-jsx",
     "types": ["node"]
-  },
+  }
 }

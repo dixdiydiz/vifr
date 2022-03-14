@@ -17,9 +17,7 @@ import Html from './Html'
 export function App() {
   return (
     <>
-      <Html
-        title="Vifr App"
-      >
+      <Html title="Vifr App">
         <nav>
           <ul>
             <div>app</div>

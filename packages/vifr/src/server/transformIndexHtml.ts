@@ -1,8 +1,7 @@
 // import type { Plugin, } from 'vite'
 import htmlparser from 'htmlparser2'
-import {ssrTransformIndexHtml}from './createServer'
-import {isArray} from "../utils";
-
+import { ssrTransformIndexHtml } from './createServer'
+import { isArray } from '../utils'
 
 interface TransformIndexHtmlDescriptor {
   head: string
@@ -18,23 +17,28 @@ interface MarkTag {
   fullStr: string
 }
 
-const EntryTemplate = '<html><head><script type="module" src="/src/entry-client.jsx"></script></head></html>'
+const EntryTemplate =
+  '<html><head><script type="module" src="/src/entry-client.jsx"></script></head></html>'
 const htmlRE = /<html>[^]*<head>([^]*)<\/head>[^]*<\/html>/i
 
-export const headCache: Record<string, any> = Object.defineProperties({
-  content: ''
-}, {
-  contentMap: {
-    set (arr: string[]) {
-      const [key, val] = arr
-      this.content = this[key] = val
+export const headCache: Record<string, any> = Object.defineProperties(
+  {
+    content: ''
+  },
+  {
+    contentMap: {
+      set(arr: string[]) {
+        const [key, val] = arr
+        this.content = this[key] = val
+      }
     }
   }
-})
+)
 
-
-export async function transformIndexHtml (url: string): Promise<TransformIndexHtmlDescriptor> {
-  let res = {head: '', body: ''}
+export async function transformIndexHtml(
+  url: string
+): Promise<TransformIndexHtmlDescriptor> {
+  let res = { head: '', body: '' }
   const html = await ssrTransformIndexHtml(url, EntryTemplate)
   const matcher = htmlRE.exec(html)
   if (isArray(matcher)) {
@@ -44,7 +48,7 @@ export async function transformIndexHtml (url: string): Promise<TransformIndexHt
   return res
 }
 
-function serializeHead (html: string): string {
+function serializeHead(html: string): string {
   let isScriptTag: boolean = false
   let stackIndex = -1
   let stack: MarkTag[] = []
@@ -55,18 +59,24 @@ function serializeHead (html: string): string {
         stack[++stackIndex] = markTag(parser.startIndex, parser.endIndex)
       }
     },
-    ontext (text) {
+    ontext(text) {
       if (isScriptTag) {
         stack[stackIndex].text = text
       }
     },
     onclosetag(name: string) {
       if (name === 'script') {
-        const {openStartIndex, openEndIndex} = stack[stackIndex]
+        const { openStartIndex, openEndIndex } = stack[stackIndex]
         const closeEndIndex = parser.endIndex
         stack[stackIndex].closeEndIndex = closeEndIndex
-        stack[stackIndex].openTagStr = html.substring(openStartIndex, openEndIndex)
-        stack[stackIndex].fullStr = html.substring(openStartIndex, closeEndIndex+1)
+        stack[stackIndex].openTagStr = html.substring(
+          openStartIndex,
+          openEndIndex
+        )
+        stack[stackIndex].fullStr = html.substring(
+          openStartIndex,
+          closeEndIndex + 1
+        )
         isScriptTag = false
       }
     }
@@ -75,8 +85,16 @@ function serializeHead (html: string): string {
   parser.end()
   let transformHtml = html
   for (let mark of stack) {
-    const {openTagStr, text, fullStr}  = mark
-    transformHtml = transformHtml.replace(fullStr, text ? `${openTagStr} dangerouslySetInnerHTML={{__html: '${text.replace(/\n/g, ';')}'}} />` : `${openTagStr} />`)
+    const { openTagStr, text, fullStr } = mark
+    transformHtml = transformHtml.replace(
+      fullStr,
+      text
+        ? `${openTagStr} dangerouslySetInnerHTML={{__html: '${text.replace(
+            /\n/g,
+            ';'
+          )}'}} />`
+        : `${openTagStr} />`
+    )
   }
 
   headCache.contentMap = [html, transformHtml]
@@ -84,7 +102,7 @@ function serializeHead (html: string): string {
   return transformHtml
 }
 
-function markTag (openStartIndex: number, openEndIndex: number): MarkTag {
+function markTag(openStartIndex: number, openEndIndex: number): MarkTag {
   return {
     openStartIndex,
     openEndIndex,

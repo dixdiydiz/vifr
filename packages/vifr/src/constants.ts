@@ -3,7 +3,6 @@
  */
 export const CLIENT_PUBLIC_PATH = `/@vite/client`
 
-
 /**
  * @description vifr virtural module
  */
