@@ -1,5 +1,4 @@
 import { Head } from 'vifr/react'
-// import head from '@vifr-virtual-head'
 
 export default function Html({ children, title }) {
   return (
