@@ -1,7 +1,6 @@
 import type {
   InlineConfig as ViteInlineConfig,
   ServerOptions as ViteServerOptions,
-  UserConfig as ViteUserConfig,
   ResolvedConfig as ViteResolvedConfig
 } from 'vite'
 import fs from 'fs'
@@ -10,7 +9,7 @@ import colors from 'picocolors'
 // import debug from 'debug'
 import { createLogger, resolveConfig as ViteResolveConfig } from 'vite'
 import reactPlugin from '@vitejs/plugin-react'
-import { virtualHeadPlugin } from './plugins/virtual-module'
+import { virtualHeadPlugin } from './plugins/virtualModule'
 import { isObject } from './utils'
 
 export interface InlineConfig extends ViteInlineConfig {
@@ -21,7 +20,13 @@ export interface InlineConfig extends ViteInlineConfig {
   server?: Exclude<ViteServerOptions, 'middlewareMode'>
 }
 
-export interface UserConfig extends ViteUserConfig {}
+export type RoutesConfig = {
+  postfix?: string
+}
+
+export interface VifrResolvedConfig extends ViteResolvedConfig {
+  routes?: RoutesConfig
+}
 
 // define vifr logger
 // const logger = createLogger(config.logLevel, {
@@ -37,6 +42,10 @@ export interface ResolveConfig {
   configFile: string
 }
 
+export let routesConfig = {
+  postfix: 'route'
+}
+
 export async function resolveConfig(
   inlineConfig: InlineConfig = {},
   command: 'build' | 'serve',
@@ -45,6 +54,10 @@ export async function resolveConfig(
   let { configFile = null } = inlineConfig
   configFile = lookupConfigFile(configFile)
   const viteResolvedConfig = await ViteResolveConfig({ configFile }, command)
+  const { routes } = viteResolvedConfig as VifrResolvedConfig
+  if (isObject(routes)) {
+    routesConfig = Object.assign({}, routesConfig, routes)
+  }
   const overrideConfig = mergeConfig(inlineConfig, configFile)
   return {
     viteResolvedConfig,
