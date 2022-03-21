@@ -1,13 +1,16 @@
+import { StrictMode } from 'react'
 import { hydrateRoot } from 'react-dom'
-import { BrowserRouter } from 'react-router-dom'
+import { VifrBrowser } from 'vifr/react'
 import { App } from './App'
 
 window.BOOT = function () {
   hydrateRoot(
     document,
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <StrictMode>
+      <VifrBrowser>
+        <App />
+      </VifrBrowser>
+    </StrictMode>
   )
 }
 if (window.LOADED) window.BOOT()

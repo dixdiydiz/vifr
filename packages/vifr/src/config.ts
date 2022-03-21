@@ -10,6 +10,7 @@ import colors from 'picocolors'
 import { createLogger, resolveConfig as ViteResolveConfig } from 'vite'
 import reactPlugin from '@vitejs/plugin-react'
 import builtInReactComponentsPlugin from './plugins/builtInReactComponentsPlugin'
+import configBridge from './plugins/configBridge'
 import { isObject } from './utils'
 
 export interface InlineConfig extends ViteInlineConfig {
@@ -99,7 +100,12 @@ function mergeConfig(
     {},
     {
       configFile,
-      plugins: [...inlinePlugins, reactPlugin(), builtInReactComponentsPlugin()]
+      plugins: [
+        ...inlinePlugins,
+        reactPlugin(),
+        builtInReactComponentsPlugin(),
+        configBridge()
+      ]
     },
     {
       server: Object.assign({}, isObject(server) && server, {

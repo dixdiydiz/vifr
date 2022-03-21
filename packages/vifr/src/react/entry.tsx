@@ -1,14 +1,22 @@
 import React, { createContext, useMemo } from 'react'
 import { StaticRouter } from 'react-router-dom/server'
 import { BrowserRouter } from 'react-router-dom'
+// @ts-ignore
+import resolvedConfig from '@vifr-virtual-resolved-config'
 
 interface VifrEntryContextType {
-  routeData: { [routeId: string]: any }
+  routesModules: { [routeId: string]: any }
 }
+
+const { routes: { postfix } = { postfix: '' } } = resolvedConfig
+const routeGlob = postfix ? `/pages/*.${postfix}.(j|t)sx?` : `/pages/*.(j|t)sx?`
+// @ts-ignore
+const routesModules = import.meta.glob(routeGlob)
 
 const VifrEntryContext = createContext<VifrEntryContextType | undefined>(
   undefined
 )
+VifrEntryContext.displayName = 'VifrEntryContext'
 
 function VifrEntry({
   isStatic,
@@ -21,7 +29,9 @@ function VifrEntry({
 }): JSX.Element {
   const Router = isStatic ? StaticRouter : BrowserRouter
   const entryCtx = useMemo(() => {
-    return { routeData: {} }
+    return {
+      routesModules
+    }
   }, [])
   return (
     <>

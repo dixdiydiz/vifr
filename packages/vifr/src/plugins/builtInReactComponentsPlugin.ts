@@ -1,5 +1,6 @@
 import type { Plugin } from 'vite'
 import { transformAsync } from '@babel/core'
+import { loadPlugin } from '../utils'
 import { headCache } from '../server/transformIndexHtml'
 
 export function virtualHeadPlugin(): Plugin {
@@ -28,10 +29,6 @@ export function virtualHeadPlugin(): Plugin {
       return null
     }
   }
-}
-
-function loadPlugin(path: string): Promise<any> {
-  return import(path).then((module) => module.default || module)
 }
 
 export default function (): Plugin[] {

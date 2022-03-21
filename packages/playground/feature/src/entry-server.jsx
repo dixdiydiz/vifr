@@ -1,13 +1,16 @@
+import { StrictMode } from 'react'
 import { renderToPipeableStream } from 'react-dom/server'
-import { StaticRouter } from 'react-router-dom/server'
+import { VifrServer } from 'vifr/react'
 import { App } from './App'
 
 export function render(url, res) {
   let didError = false
   const { pipe, abort } = renderToPipeableStream(
-    <StaticRouter location={url}>
-      <App />
-    </StaticRouter>,
+    <StrictMode>
+      <VifrServer location={url}>
+        <App />
+      </VifrServer>
+    </StrictMode>,
     {
       bootstrapScriptContent: 'window.BOOT ? BOOT() : (window.LOADED = true)',
       // bootstrapModules: ['/src/entry-client.jsx'],

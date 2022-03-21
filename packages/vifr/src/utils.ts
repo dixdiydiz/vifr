@@ -15,3 +15,7 @@ export const isAsyncFunction = (arg: unknown): boolean =>
   toString(arg) == 'AsyncFunction'
 export const isGeneratorFunction = (arg: unknown): boolean =>
   toString(arg) == 'GeneratorFunction'
+
+export function loadPlugin(path: string): Promise<any> {
+  return import(path).then((module) => module.default || module)
+}
