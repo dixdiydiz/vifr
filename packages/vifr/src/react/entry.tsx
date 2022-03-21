@@ -11,15 +11,15 @@ const VifrEntryContext = createContext<VifrEntryContextType | undefined>(
 )
 
 function VifrEntry({
-  isSsr,
+  isStatic,
   location,
   children
 }: {
-  isSsr: boolean
+  isStatic: boolean
   location: string
   children: React.ReactNode
 }): JSX.Element {
-  const Router = isSsr ? StaticRouter : BrowserRouter
+  const Router = isStatic ? StaticRouter : BrowserRouter
   const entryCtx = useMemo(() => {
     return { routeData: {} }
   }, [])
@@ -41,7 +41,7 @@ export function VifrServer({
 }): JSX.Element {
   return (
     <>
-      <VifrEntry isSsr location={location}>
+      <VifrEntry isStatic location={location}>
         {children}
       </VifrEntry>
     </>
@@ -57,7 +57,7 @@ export function VifrBrowser({
 }): JSX.Element {
   return (
     <>
-      <VifrEntry isSsr={false} location={location}>
+      <VifrEntry isStatic={false} location={location}>
         {children}
       </VifrEntry>
     </>
