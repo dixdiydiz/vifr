@@ -1,7 +1,8 @@
+import type { Plugin } from 'vite'
 import { transformAsync } from '@babel/core'
 import { headCache } from '../server/transformIndexHtml'
 
-export function virtualHeadPlugin() {
+export function virtualHeadPlugin(): Plugin {
   const virtualModuleId = '@vifr-virtual-head'
   const resolvedVirtualModuleId = '\0' + virtualModuleId
   return {
@@ -31,4 +32,8 @@ export function virtualHeadPlugin() {
 
 function loadPlugin(path: string): Promise<any> {
   return import(path).then((module) => module.default || module)
+}
+
+export default function (): Plugin[] {
+  return [virtualHeadPlugin()]
 }
