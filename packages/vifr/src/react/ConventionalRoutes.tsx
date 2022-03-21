@@ -1,7 +1,3 @@
 export function ConventionalRoutes() {
-  return (
-    <>
-      <Routes />
-    </>
-  )
+  return <></>
 }
