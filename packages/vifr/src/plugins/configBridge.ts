@@ -1,18 +1,22 @@
 import type { Plugin } from 'vite'
-import { resolvedConfig } from '../config'
+import type { VifrResolvedConfig } from '../config'
 
 export function virtualResolvedConfigPlugin(): Plugin {
+  let config: VifrResolvedConfig
   const virtualModuleId = '@vifr-virtual-resolved-config'
   const resolvedVirtualModuleId = '\0' + virtualModuleId
   return {
     name: 'vifr:virtual-resolved-config',
+    enforce: 'pre',
+    configResolved(resolvedConfig) {
+      config = resolvedConfig as VifrResolvedConfig
+    },
     resolveId(id: string) {
       return id === virtualModuleId ? resolvedVirtualModuleId : null
     },
     async load(id: string) {
       if (id === resolvedVirtualModuleId) {
-        console.log(resolvedConfig)
-        return `export default ${resolvedConfig}`
+        return `export default config = ${JSON.stringify(config)}`
       }
       return null
     }

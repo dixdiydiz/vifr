@@ -8,10 +8,11 @@ interface VifrEntryContextType {
   routesModules: { [routeId: string]: any }
 }
 
-const { routes: { postfix } = { postfix: '' } } = resolvedConfig
-const routeGlob = postfix ? `/pages/*.${postfix}.(j|t)sx?` : `/pages/*.(j|t)sx?`
+// const { routes: { postfix } = { postfix: '' } } = resolvedConfig
+console.log(resolvedConfig)
 // @ts-ignore
-const routesModules = import.meta.glob(routeGlob)
+const routesModules = import.meta.glob(`/src/pages/*.(j|t)sx?`)
+console.log('routesModules', routesModules)
 
 const VifrEntryContext = createContext<VifrEntryContextType | undefined>(
   undefined

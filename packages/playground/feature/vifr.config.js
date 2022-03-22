@@ -9,6 +9,9 @@ module.exports = {
   optimizeDeps: {
     include: ['react/jsx-runtime']
   },
+  routes: {
+    postfix: 'route'
+  },
   plugins: [],
   build: {
     minify: false

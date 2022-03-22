@@ -10,7 +10,7 @@ import colors from 'picocolors'
 import { createLogger, resolveConfig as ViteResolveConfig } from 'vite'
 import reactPlugin from '@vitejs/plugin-react'
 import builtInReactComponentsPlugin from './plugins/builtInReactComponentsPlugin'
-import configBridge from './plugins/configBridge'
+import virtualResolvedConfigPlugin from './plugins/configBridge'
 import { isObject } from './utils'
 
 export interface InlineConfig extends ViteInlineConfig {
@@ -43,8 +43,6 @@ export interface ResolveConfig {
   configFile: string
 }
 
-export let resolvedConfig: VifrResolvedConfig
-
 export async function resolveConfig(
   inlineConfig: InlineConfig = {},
   command: 'build' | 'serve',
@@ -53,7 +51,6 @@ export async function resolveConfig(
   let { configFile = null } = inlineConfig
   configFile = lookupConfigFile(configFile)
   const viteResolvedConfig = await ViteResolveConfig({ configFile }, command)
-  resolvedConfig = viteResolvedConfig
   const overrideConfig = mergeConfig(inlineConfig, configFile)
   return {
     viteResolvedConfig,
@@ -104,7 +101,7 @@ function mergeConfig(
         ...inlinePlugins,
         reactPlugin(),
         builtInReactComponentsPlugin(),
-        configBridge()
+        virtualResolvedConfigPlugin()
       ]
     },
     {
