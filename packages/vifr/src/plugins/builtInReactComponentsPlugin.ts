@@ -31,6 +31,13 @@ function virtualHeadPlugin(): Plugin {
   }
 }
 
+function transformRoutesImportMetaUrlPlugin(): Plugin {
+  return {
+    name: 'vifr:transform-routes-importMetaUrl',
+    async transform(code, id, options): Promise<{ code: any; map: any }> {}
+  }
+}
+
 export default function (): Plugin[] {
   return [virtualHeadPlugin()]
 }
