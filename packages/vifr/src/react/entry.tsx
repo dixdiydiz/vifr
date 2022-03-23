@@ -1,17 +1,16 @@
 import React, { createContext, useMemo } from 'react'
 import { StaticRouter } from 'react-router-dom/server'
 import { BrowserRouter } from 'react-router-dom'
-// @ts-ignore
-import resolvedConfig from '@vifr-virtual-resolved-config'
 
 interface VifrEntryContextType {
   routesModules: { [routeId: string]: any }
 }
 
 // const { routes: { postfix } = { postfix: '' } } = resolvedConfig
-console.log(resolvedConfig)
 // @ts-ignore
-const routesModules = import.meta.glob(`/src/pages/*.(j|t)sx?`)
+const postfix = `/src/pages/*.(j|t)s?(x)`
+// @ts-ignore
+const routesModules = import.meta.glob(postfix)
 console.log('routesModules', routesModules)
 
 const VifrEntryContext = createContext<VifrEntryContextType | undefined>(

@@ -3,7 +3,7 @@ import { transformAsync } from '@babel/core'
 import { loadPlugin } from '../utils'
 import { headCache } from '../server/transformIndexHtml'
 
-export function virtualHeadPlugin(): Plugin {
+function virtualHeadPlugin(): Plugin {
   const virtualModuleId = '@vifr-virtual-head'
   const resolvedVirtualModuleId = '\0' + virtualModuleId
   return {
