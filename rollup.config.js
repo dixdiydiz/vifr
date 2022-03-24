@@ -75,7 +75,7 @@ function vifrReact() {
       input: [`${SOURCE_DIR}/index.ts`],
       output: {
         dir: OUTPUT_DIR,
-        entryFileNames: `[name].js`,
+        entryFileNames: `vifr-react.js`,
         exports: 'named',
         format: 'es'
       },

@@ -11,7 +11,7 @@
   "main": "dist/index.js",
   "exports": {
     ".": "./dist/index.js",
-    "./react": "./dist/react/index.js"
+    "./react": "./dist/react/vifr-react.js"
   },
   "types": "dist/index.d.ts",
   "devDependencies": {
