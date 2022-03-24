@@ -1,7 +1,9 @@
 import type { Plugin } from 'vite'
+import MagicString from 'magic-string'
 import { transformAsync } from '@babel/core'
-import { loadPlugin } from '../utils'
+import { isString, loadPlugin } from '../utils'
 import { headCache } from '../server/transformIndexHtml'
+import type { VifrResolvedConfig } from '../config'
 
 function virtualHeadPlugin(): Plugin {
   const virtualModuleId = '@vifr-virtual-head'
@@ -32,12 +34,37 @@ function virtualHeadPlugin(): Plugin {
 }
 
 function transformRoutesImportMetaUrlPlugin(): Plugin {
+  let config: VifrResolvedConfig
   return {
     name: 'vifr:transform-routes-importMetaUrl',
-    async transform(code, id, options): Promise<{ code: any; map: any }> {}
+    enforce: 'pre',
+    configResolved(resolvedConfig) {
+      config = resolvedConfig as VifrResolvedConfig
+    },
+    async transform(code, id) {
+      if (id.includes('vifr/dist/react/index.js')) {
+        const s = new MagicString(code)
+        let { routes: { postfix } = { postfix: '' } } = config
+        postfix = isString(postfix)
+          ? postfix
+              .split('.')
+              .reduce(
+                (res, segment) => (segment ? `${res}.${segment}` : res),
+                ''
+              )
+          : ''
+        const routesPattern = `"/src/pages/*${postfix}.(j|t)s?(x)"`
+        s.replace('`__VIFR_ROUTES_PATTERN`', routesPattern)
+        return {
+          code: s.toString(),
+          map: s.generateMap({ hires: true }) ?? null
+        }
+      }
+      return null
+    }
   }
 }
 
 export default function (): Plugin[] {
-  return [virtualHeadPlugin()]
+  return [virtualHeadPlugin(), transformRoutesImportMetaUrlPlugin()]
 }

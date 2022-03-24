@@ -10,7 +10,7 @@ module.exports = {
     include: ['react/jsx-runtime']
   },
   routes: {
-    postfix: 'route'
+    postfix: ''
   },
   plugins: [],
   build: {
