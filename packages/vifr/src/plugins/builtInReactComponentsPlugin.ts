@@ -6,6 +6,43 @@ import { ROUTES_ROOT } from '../constant'
 import { headCache } from '../server/transformIndexHtml'
 import type { VifrResolvedConfig } from '../config'
 
+let resolvedVifrConfig: Required<Pick<VifrResolvedConfig, 'routes'>>
+
+export function resolvedVifrConfigPlugin(): Plugin {
+  const virtualModuleId = '@vifr-virtual-resolved-config'
+  const resolvedVirtualModuleId = '\0' + virtualModuleId
+  return {
+    name: 'vifr:virtual-resolved-config',
+    enforce: 'pre',
+    configResolved(resolvedConfig) {
+      let {
+        routes: { postfix, caseSensitive } = {
+          postfix: '',
+          caseSensitive: false
+        }
+      } = resolvedConfig as VifrResolvedConfig
+      postfix = isString(postfix)
+        ? postfix
+            .split('.')
+            .reduce((res, segment) => (segment ? `${res}.${segment}` : res), '')
+        : ''
+      caseSensitive = Boolean(caseSensitive)
+      resolvedVifrConfig = {
+        routes: { postfix, caseSensitive }
+      }
+    },
+    resolveId(id: string) {
+      return id === virtualModuleId ? resolvedVirtualModuleId : null
+    },
+    async load(id: string) {
+      if (id === resolvedVirtualModuleId) {
+        return `export default config = ${JSON.stringify(resolvedVifrConfig)}`
+      }
+      return null
+    }
+  }
+}
+
 function virtualHeadPlugin(): Plugin {
   const virtualModuleId = '@vifr-virtual-head'
   const resolvedVirtualModuleId = '\0' + virtualModuleId
@@ -35,25 +72,15 @@ function virtualHeadPlugin(): Plugin {
 }
 
 function transformRoutesImportMetaUrlPlugin(): Plugin {
-  let config: VifrResolvedConfig
   return {
     name: 'vifr:transform-vifr-react-components',
     enforce: 'pre',
-    configResolved(resolvedConfig) {
-      config = resolvedConfig as VifrResolvedConfig
-    },
     async transform(code, id) {
       if (id.includes('vifr/dist/react/vifr-react.js')) {
         const s = new MagicString(code)
-        let { routes: { postfix } = { postfix: '' } } = config
-        postfix = isString(postfix)
-          ? postfix
-              .split('.')
-              .reduce(
-                (res, segment) => (segment ? `${res}.${segment}` : res),
-                ''
-              )
-          : ''
+        const {
+          routes: { postfix }
+        } = resolvedVifrConfig
         const routesPattern = `"${ROUTES_ROOT}/*${postfix}.(j|t)s?(x)"`
         s.replace('`__VIFR_ROUTES_PATTERN`', routesPattern)
         return {
@@ -67,5 +94,9 @@ function transformRoutesImportMetaUrlPlugin(): Plugin {
 }
 
 export default function (): Plugin[] {
-  return [virtualHeadPlugin(), transformRoutesImportMetaUrlPlugin()]
+  return [
+    resolvedVifrConfigPlugin(),
+    virtualHeadPlugin(),
+    transformRoutesImportMetaUrlPlugin()
+  ]
 }

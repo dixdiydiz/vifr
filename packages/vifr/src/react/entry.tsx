@@ -3,13 +3,8 @@ import { StaticRouter } from 'react-router-dom/server'
 import { BrowserRouter } from 'react-router-dom'
 
 interface VifrEntryContextType {
-  routesModules: { [routeId: string]: any }
+  [key: string]: any
 }
-
-// @ts-ignore
-const routesModules = import.meta.glob(`__VIFR_ROUTES_PATTERN`)
-
-console.log('routesModules', routesModules)
 
 const VifrEntryContext = createContext<VifrEntryContextType | undefined>(
   undefined
@@ -27,9 +22,7 @@ function VifrEntry({
 }): JSX.Element {
   const Router = isStatic ? StaticRouter : BrowserRouter
   const entryCtx = useMemo(() => {
-    return {
-      routesModules
-    }
+    return {}
   }, [])
   return (
     <>

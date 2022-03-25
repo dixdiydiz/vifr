@@ -1,5 +1,5 @@
 import { Link, Routes, Route } from 'react-router-dom'
-import Html from './Html'
+import { ConventionalRoutes } from 'vifr/react'
 
 // Auto generates routes from files under ./pages
 // https://vitejs.dev/guide/features.html#glob-import
@@ -14,32 +14,23 @@ import Html from './Html'
 //   }
 // })
 
-export function App() {
+export default function App() {
   return (
     <>
-      <Html title="Vifr App">
-        <nav>
-          <ul>
-            <div>app</div>
-            {/*{routes.map(({ name, path }) => {*/}
-            {/*  return (*/}
-            {/*    <li key={path}>*/}
-            {/*      <Link to={path}>{name}</Link>*/}
-            {/*    </li>*/}
-            {/*  )*/}
-            {/*})}*/}
-          </ul>
-        </nav>
-        {/*<Routes>*/}
-        {/*  {routes.map(({ path, component: RouteComp }) => {*/}
-        {/*    return (*/}
-        {/*      <Route key={path} path={path}>*/}
-        {/*        <RouteComp />*/}
-        {/*      </Route>*/}
-        {/*    )*/}
-        {/*  })}*/}
-        {/*</Routes>*/}
-      </Html>
+      <nav>
+        <ul>
+          <div>app</div>
+          {/*{routes.map(({ name, path }) => {*/}
+          {/*  return (*/}
+          {/*    <li key={path}>*/}
+          {/*      <Link to={path}>{name}</Link>*/}
+          {/*    </li>*/}
+          {/*  )*/}
+          {/*})}*/}
+        </ul>
+      </nav>
+      <div>22</div>
+      <ConventionalRoutes />
     </>
   )
 }

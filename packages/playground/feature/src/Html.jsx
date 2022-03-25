@@ -1,6 +1,8 @@
 import { Head } from 'vifr/react'
+// import App from './App'
+import { ConventionalRoutes } from 'vifr/react'
 
-export default function Html({ children, title }) {
+export default function Html() {
   return (
     <>
       <html lang="en">
@@ -9,7 +11,7 @@ export default function Html({ children, title }) {
           <meta charSet="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link rel="shortcut icon" href="favicon.ico" />
-          <title>{title}</title>
+          <title>Vifr App</title>
         </head>
         <body>
           <noscript
@@ -17,8 +19,7 @@ export default function Html({ children, title }) {
               __html: `<b>Enable JavaScript to run this app.</b>`
             }}
           />
-          {children}
-          <div>2224</div>
+          <ConventionalRoutes />
         </body>
       </html>
     </>

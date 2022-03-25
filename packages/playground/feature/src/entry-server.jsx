@@ -1,14 +1,14 @@
 import { StrictMode } from 'react'
 import { renderToPipeableStream } from 'react-dom/server'
 import { VifrServer } from 'vifr/react'
-import { App } from './App'
+import Html from './Html'
 
 export function render(url, res) {
   let didError = false
   const { pipe, abort } = renderToPipeableStream(
     <StrictMode>
       <VifrServer location={url}>
-        <App />
+        <Html />
       </VifrServer>
     </StrictMode>,
     {

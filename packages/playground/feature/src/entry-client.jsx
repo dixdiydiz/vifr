@@ -1,14 +1,14 @@
 import { StrictMode } from 'react'
 import { hydrateRoot } from 'react-dom'
 import { VifrBrowser } from 'vifr/react'
-import { App } from './App'
+import Html from './Html'
 
 window.BOOT = function () {
   hydrateRoot(
     document,
     <StrictMode>
       <VifrBrowser>
-        <App />
+        <Html />
       </VifrBrowser>
     </StrictMode>
   )
