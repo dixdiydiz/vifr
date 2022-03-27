@@ -36,7 +36,7 @@ export function resolvedVifrConfigPlugin(): Plugin {
     },
     async load(id: string) {
       if (id === resolvedVirtualModuleId) {
-        return `export default config = ${JSON.stringify(resolvedVifrConfig)}`
+        return `export default ${JSON.stringify(resolvedVifrConfig)}`
       }
       return null
     }

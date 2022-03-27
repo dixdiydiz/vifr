@@ -24,8 +24,6 @@ function withConventionalRoutes(
   dynamicImport: () => Promise<{ default: React.ComponentType<any> }>
 ): React.ReactNode {
   const DynamicComponent = lazy(dynamicImport)
-  // @ts-ignore todo: waitting resolve
-  DynamicComponent.displayName = `WithConventionalRoutes(${key})`
   return <DynamicComponent />
 }
 
@@ -35,19 +33,13 @@ const routes = createRoutes(pages, files, ROUTES_ROOT, {
 })
 
 export function ConventionalRoutes() {
-  return useRoutes([...routes])
+  return useRoutes(routes)
 }
 
 interface Options {
-  // todo
-  handler?: (f: string) => any
   postfix?: string
   caseSensitive?: boolean
 }
-
-// interface RouteObject extends ReactRouteObject {
-//   src?: string
-// }
 
 function normalizeRoutePath(path: string, postfix: string): string {
   const postfixGroup = postfix ? postfix.split('.') : []
@@ -168,8 +160,6 @@ function createRoutes(
   options?: Options
 ): RouteObject[] {
   const defaultOptions = {
-    // todo
-    handler: (f: string) => f,
     postfix: '',
     caseSensitive: false
   }
