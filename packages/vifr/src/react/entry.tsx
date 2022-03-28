@@ -17,17 +17,20 @@ function VifrEntry({
   children
 }: {
   isStatic: boolean
-  location: string
+  location?: string
   children: React.ReactNode
 }): JSX.Element {
-  const Router = isStatic ? StaticRouter : BrowserRouter
   const entryCtx = useMemo(() => {
     return {}
   }, [])
   return (
     <>
       <VifrEntryContext.Provider value={entryCtx}>
-        <Router location={location}>{children}</Router>
+        {isStatic ? (
+          <StaticRouter location={location!}>{children}</StaticRouter>
+        ) : (
+          <BrowserRouter>{children}</BrowserRouter>
+        )}
       </VifrEntryContext.Provider>
     </>
   )
@@ -50,17 +53,13 @@ export function VifrServer({
 }
 
 export function VifrBrowser({
-  location,
   children
 }: {
-  location: string
   children: React.ReactNode
 }): JSX.Element {
   return (
     <>
-      <VifrEntry isStatic={false} location={location}>
-        {children}
-      </VifrEntry>
+      <VifrEntry isStatic={false}>{children}</VifrEntry>
     </>
   )
 }

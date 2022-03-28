@@ -1,8 +1,10 @@
 // @ts-ignore
 import resolvedVifrConfig from '@vifr-virtual-resolved-config'
+// @ts-ignore
 import type { RouteObject } from 'react-router-dom'
 import type React from 'react'
 import { lazy } from 'react'
+// @ts-ignore
 import { useRoutes } from 'react-router-dom'
 import { ROUTES_ROOT } from '../constant'
 
@@ -32,7 +34,7 @@ const routes = createRoutes(pages, files, ROUTES_ROOT, {
   caseSensitive
 })
 
-export function ConventionalRoutes() {
+export function ConventionalRoutes(): React.ReactNode {
   return useRoutes(routes)
 }
 
@@ -41,22 +43,23 @@ interface Options {
   caseSensitive?: boolean
 }
 
-function normalizeRoutePath(path: string, postfix: string): string {
-  const postfixGroup = postfix ? postfix.split('.') : []
-  let pathGroup = path.split('.')
-  pathGroup = pathGroup.slice(0, pathGroup.length - postfixGroup.length - 1)
-  return pathGroup.reduce((res, curr) => {
-    if (/^404$/.test(curr)) {
-      return '*'
-    }
-    if (/^\$$/.test(curr)) {
-      return `${res}/*`
-    }
-    if (/^\$/.test(curr)) {
-      return res ? `${res}/:${curr.substring(1)}` : `:${curr.substring(1)}`
-    }
-    return res ? `${res}/${curr}` : `${curr}`
-  }, '')
+function createRoutes(
+  pages: Pages,
+  files: string[],
+  root: string,
+  options?: Options
+): RouteObject[] {
+  const defaultOptions = {
+    postfix: '',
+    caseSensitive: false
+  }
+  return createRoute(
+    pages,
+    files,
+    root,
+    root,
+    Object.assign({}, defaultOptions, options)
+  )
 }
 
 function createRoute(
@@ -88,7 +91,7 @@ function createRoute(
     }
     const routePath = normalizeRoutePath(standbyFile, postfix)
     const DynamicComponent = withConventionalRoutes(file, pages[file])
-    if (isRoot && routePath === 'root') {
+    if (isRoot && routePath.toLowerCase() === 'root') {
       selfRoute = {
         path: '/',
         caseSensitive,
@@ -104,7 +107,7 @@ function createRoute(
       }
       continue
     }
-    if (/^index$/.test(routePath)) {
+    if (/^index$/.test(routePath.toLowerCase())) {
       routes.push({
         index: true,
         element: DynamicComponent
@@ -153,21 +156,20 @@ function createRoute(
   }
 }
 
-function createRoutes(
-  pages: Pages,
-  files: string[],
-  root: string,
-  options?: Options
-): RouteObject[] {
-  const defaultOptions = {
-    postfix: '',
-    caseSensitive: false
-  }
-  return createRoute(
-    pages,
-    files,
-    root,
-    root,
-    Object.assign({}, defaultOptions, options)
-  )
+function normalizeRoutePath(path: string, postfix: string): string {
+  const postfixGroup = postfix ? postfix.split('.') : []
+  let pathGroup = path.split('.')
+  pathGroup = pathGroup.slice(0, pathGroup.length - postfixGroup.length - 1)
+  return pathGroup.reduce((res, curr) => {
+    if (/^404$/.test(curr)) {
+      return '*'
+    }
+    if (/^\$$/.test(curr)) {
+      return `${res}/*`
+    }
+    if (/^\$/.test(curr)) {
+      return res ? `${res}/:${curr.substring(1)}` : `:${curr.substring(1)}`
+    }
+    return res ? `${res}/${curr}` : `${curr}`
+  }, '')
 }

@@ -72,10 +72,10 @@ function vifrReact() {
   const virtualModuleReg = /@vifr-virtual/
   return [
     {
-      input: [`${SOURCE_DIR}/index.ts`],
+      input: [`${SOURCE_DIR}/vifr-react.ts`],
       output: {
         dir: OUTPUT_DIR,
-        entryFileNames: `vifr-react.js`,
+        entryFileNames: `[name].js`,
         exports: 'named',
         format: 'es'
       },

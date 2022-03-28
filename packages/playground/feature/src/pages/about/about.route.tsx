@@ -1,5 +1,5 @@
-import { addAndMultiply } from '../add'
-import { multiplyAndAdd } from '../multiply'
+import { addAndMultiply } from '../../add'
+import { multiplyAndAdd } from '../../multiply'
 
 export default function About() {
   return (

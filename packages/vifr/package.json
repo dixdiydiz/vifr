@@ -18,8 +18,7 @@
     "@types/babel__core": "^7.1.18",
     "@types/debug": "^4.1.7",
     "debug": "^4.3.3",
-    "picocolors": "^1.0.0",
-    "react-router-dom": "6"
+    "picocolors": "^1.0.0"
   },
   "dependencies": {
     "@babel/core": "^7.17.5",
@@ -30,11 +29,6 @@
     "htmlparser2": "^7.2.0",
     "magic-string": "^0.26.1",
     "vite": "^2.8.5"
-  },
-  "peerDependencies": {
-    "react": ">=18",
-    "react-dom": "^>=18",
-    "react-router-dom": ">=6"
   },
   "packageManager": "pnpm@6.32.2",
   "engines": {
