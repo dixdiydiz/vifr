@@ -54,13 +54,13 @@ importers:
     specifiers:
       compression: ^1.7.4
       express: ^4.17.1
-      react: ^18.0.0-rc.1-next-f468816ef-20220225
-      react-dom: ^18.0.0-rc.1-next-f468816ef-20220225
+      react: ^18.0.0-rc.3-next-033fe52b4-20220325
+      react-dom: ^18.0.0-rc.3-next-033fe52b4-20220325
       serve-static: ^1.14.1
       vifr: workspace:*
     dependencies:
-      react: 18.0.0-rc.1-next-f468816ef-20220225
-      react-dom: 18.0.0-rc.1-next-f468816ef-20220225_a28f1fd517be1d2b056a3673720bd102
+      react: 18.0.0-rc.3-next-de516ca5a-20220321
+      react-dom: 18.0.0-rc.3-next-de516ca5a-20220321_1d81fe1bff57e86f30d2d405110ea7f4
     devDependencies:
       compression: 1.7.4
       express: 4.17.3
@@ -2243,14 +2243,14 @@ packages:
       unpipe: 1.0.0
     dev: true
 
-  /react-dom/18.0.0-rc.1-next-f468816ef-20220225_a28f1fd517be1d2b056a3673720bd102:
-    resolution: {integrity: sha512-GDr1pMmH6bMjv571SAVdsW9C99zkx5xJ6tG4Mu5vhOBApV2LZkvrAy9eUS1l3W/ZGp6hTrTUzrnKJ2PIA/g00Q==}
+  /react-dom/18.0.0-rc.3-next-de516ca5a-20220321_1d81fe1bff57e86f30d2d405110ea7f4:
+    resolution: {integrity: sha512-U1g0XE9dgI1b9moPQhvPtIeNnnVaDyyJ2nyr2sgoQM1tWw23hgCU9UUpZ2kNPcyLQZGMQsBCtd/Xs+XNd1RNjQ==}
     peerDependencies:
-      react: 18.0.0-rc.1-next-f468816ef-20220225
+      react: 18.0.0-rc.3-next-de516ca5a-20220321
     dependencies:
       loose-envify: 1.4.0
-      react: 18.0.0-rc.1-next-f468816ef-20220225
-      scheduler: 0.21.0-rc.1-next-f468816ef-20220225
+      react: 18.0.0-rc.3-next-de516ca5a-20220321
+      scheduler: 0.21.0-rc.3-next-de516ca5a-20220321
     dev: false
 
   /react-refresh/0.11.0:
@@ -2276,8 +2276,8 @@ packages:
       history: 5.2.0
     dev: true
 
-  /react/18.0.0-rc.1-next-f468816ef-20220225:
-    resolution: {integrity: sha512-KTEaxCdleZPZtCfxhrSEYHohZRo0W1FWt5s28OsmwpPfIiDaQksoUf5bvMSn4wgfyt1gAM1Ot+wM74s4lTbNtA==}
+  /react/18.0.0-rc.3-next-de516ca5a-20220321:
+    resolution: {integrity: sha512-yPIz7BWOWO3HEgm+XBEavKkI/byVDPnODJXpYo3yIat+XRV7irbHpb+l1IxrEZpbWxM3N5S4tCz315cIYGTyLQ==}
     engines: {node: '>=0.10.0'}
     dependencies:
       loose-envify: 1.4.0
@@ -2399,8 +2399,8 @@ packages:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
     dev: true
 
-  /scheduler/0.21.0-rc.1-next-f468816ef-20220225:
-    resolution: {integrity: sha512-/maKldJ78Ba2o1e9kh2mUpqNZH7XrmSQ1o1aa3HUPN/OMotUB9+pBKX/y3Zihkjco21H4cujG9hK2sJOZUpzJw==}
+  /scheduler/0.21.0-rc.3-next-de516ca5a-20220321:
+    resolution: {integrity: sha512-g/Zjh5Nz9nxRP3xQQJuegLJWzJQuO03XF1WkWRS37PNczvw1jOV30utrrCxx819JNsA4A3JXAhdBjyZj81LMfw==}
     dependencies:
       loose-envify: 1.4.0
     dev: false

@@ -24,7 +24,7 @@ export function resolvedVifrConfigPlugin(): Plugin {
       postfix = isString(postfix)
         ? postfix
             .split('.')
-            .reduce((res, segment) => (segment ? `${res}.${segment}` : res), '')
+            .reduce((res, segment) => (segment ? `${res}.${segment}` : res))
         : ''
       caseSensitive = Boolean(caseSensitive)
       resolvedVifrConfig = {
@@ -81,7 +81,9 @@ function transformRoutesImportMetaUrlPlugin(): Plugin {
         const {
           routes: { postfix }
         } = resolvedVifrConfig
-        const routesPattern = `"${ROUTES_ROOT}/*${postfix}.(j|t)s?(x)"`
+        const routesPattern = postfix
+          ? `"${ROUTES_ROOT}/**/*.${postfix}.(j|t)s?(x)"`
+          : `"${ROUTES_ROOT}/**/*.(j|t)s?(x)"`
         s.replace('`__VIFR_ROUTES_PATTERN`', routesPattern)
         return {
           code: s.toString(),

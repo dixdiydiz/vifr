@@ -28,5 +28,5 @@ export function render(url, res) {
   )
   // Abandon and switch to client rendering if enough time passes.
   // Try lowering this to see the client recover.
-  setTimeout(abort, 10000)
+  // setTimeout(abort, 10000)
 }

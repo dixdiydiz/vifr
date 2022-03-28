@@ -70,6 +70,7 @@ function createRoute(
   options: Required<Options>
 ): RouteObject[] {
   const { postfix, caseSensitive } = options
+  const lowerCaseFolder = folder.toLowerCase()
   const isRoot = fullFolder === folder
   const routes: RouteObject[] = []
   const deepRoutes = Object.create(null)
@@ -89,9 +90,12 @@ function createRoute(
       }
       continue
     }
-    const routePath = normalizeRoutePath(standbyFile, postfix)
+    const { routePath, lowerCaseRoutePath } = normalizeRoutePath(
+      standbyFile,
+      postfix
+    )
     const DynamicComponent = withConventionalRoutes(file, pages[file])
-    if (isRoot && routePath.toLowerCase() === 'root') {
+    if (isRoot && lowerCaseRoutePath === 'root') {
       selfRoute = {
         path: '/',
         caseSensitive,
@@ -99,7 +103,9 @@ function createRoute(
       }
       continue
     }
-    if (routePath === folder || routePath === `${folder}/*`) {
+    if (
+      [lowerCaseFolder, `${lowerCaseFolder}/*`].includes(lowerCaseRoutePath)
+    ) {
       selfRoute = {
         path: routePath,
         caseSensitive,
@@ -107,7 +113,7 @@ function createRoute(
       }
       continue
     }
-    if (/^index$/.test(routePath.toLowerCase())) {
+    if (/^index$/.test(lowerCaseRoutePath)) {
       routes.push({
         index: true,
         element: DynamicComponent
@@ -156,11 +162,17 @@ function createRoute(
   }
 }
 
-function normalizeRoutePath(path: string, postfix: string): string {
+function normalizeRoutePath(
+  path: string,
+  postfix: string
+): {
+  routePath: string
+  lowerCaseRoutePath: string
+} {
   const postfixGroup = postfix ? postfix.split('.') : []
   let pathGroup = path.split('.')
   pathGroup = pathGroup.slice(0, pathGroup.length - postfixGroup.length - 1)
-  return pathGroup.reduce((res, curr) => {
+  const routePath = pathGroup.reduce((res, curr) => {
     if (/^404$/.test(curr)) {
       return '*'
     }
@@ -172,4 +184,8 @@ function normalizeRoutePath(path: string, postfix: string): string {
     }
     return res ? `${res}/${curr}` : `${curr}`
   }, '')
+  return {
+    routePath,
+    lowerCaseRoutePath: routePath.toLowerCase()
+  }
 }
