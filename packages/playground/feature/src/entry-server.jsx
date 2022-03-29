@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import { renderToPipeableStream } from 'react-dom/server'
 import { VifrServer } from 'vifr/react'
 import Html from './Html'
@@ -6,11 +5,9 @@ import Html from './Html'
 export function render(url, res) {
   let didError = false
   const { pipe, abort } = renderToPipeableStream(
-    <StrictMode>
-      <VifrServer location={url}>
-        <Html />
-      </VifrServer>
-    </StrictMode>,
+    <VifrServer location={url}>
+      <Html />
+    </VifrServer>,
     {
       bootstrapScriptContent: 'window.BOOT ? BOOT() : (window.LOADED = true)',
       // bootstrapModules: ['/src/entry-client.jsx'],

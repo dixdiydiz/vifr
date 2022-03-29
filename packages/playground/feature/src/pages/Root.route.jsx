@@ -7,10 +7,10 @@ export default function Root() {
         <h1>Links</h1>
         <ul>
           <li>
-            <Link to="home">Home</Link>
+            <Link to="/home">Home</Link>
           </li>
           <li>
-            <Link to="about">About</Link>
+            <Link to="/about">About</Link>
           </li>
         </ul>
         <div>

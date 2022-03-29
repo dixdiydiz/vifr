@@ -35,6 +35,7 @@ const routes = createRoutes(pages, files, ROUTES_ROOT, {
 })
 
 export function ConventionalRoutes(): React.ReactNode {
+  console.log('routes', routes)
   return useRoutes(routes)
 }
 
