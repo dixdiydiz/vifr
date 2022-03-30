@@ -1,24 +1,28 @@
 import { renderToPipeableStream } from 'react-dom/server'
 import { VifrServer } from 'vifr/react'
+import ErrorBoundary from './ErrorBoundary'
 import Html from './Html'
 
 export function render(url, res) {
-  let didError = false
   const { pipe, abort } = renderToPipeableStream(
     <VifrServer location={url}>
-      <Html />
+      <ErrorBoundary>
+        <Html />
+      </ErrorBoundary>
     </VifrServer>,
     {
       bootstrapScriptContent: 'window.BOOT ? BOOT() : (window.LOADED = true)',
       // bootstrapModules: ['/src/entry-client.jsx'],
-      onCompleteShell() {
-        // If something errored before we started streaming, we set the error code appropriately.
-        res.statusCode = didError ? 500 : 200
+      onAllReady() {
+        res.statusCode = 200
         res.setHeader('Content-type', 'text/html')
         pipe(res)
       },
       onError(x) {
-        didError = true
+        res.statusCode = 500
+        res.send(
+          '<!doctype html><p>Loading...</p><script type="module">console.log(`error`)</script>'
+        )
         console.error(x)
       }
     }

@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
-import { hydrateRoot } from 'react-dom'
+import { hydrateRoot } from 'react-dom/client'
 import { VifrBrowser } from 'vifr/react'
+import ErrorBoundary from './ErrorBoundary'
 import Html from './Html'
 
 window.BOOT = function () {
@@ -8,7 +9,9 @@ window.BOOT = function () {
     document,
     <StrictMode>
       <VifrBrowser>
-        <Html />
+        <ErrorBoundary>
+          <Html />
+        </ErrorBoundary>
       </VifrBrowser>
     </StrictMode>
   )
