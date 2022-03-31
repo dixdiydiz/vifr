@@ -7,15 +7,14 @@ import * as React from 'react'
 import { useRoutes } from 'react-router-dom'
 import { ROUTES_ROOT } from '../constant'
 
-interface Pages {
+interface PagesType {
   [index: string]: () => Promise<{
     default: React.ComponentType<React.ReactNode>
   }>
 }
 
 // @ts-ignore
-const pages: Pages = import.meta.glob(`__VIFR_ROUTES_PATTERN`)
-const files = Object.keys(pages)
+const pages: PagesType = import.meta.glob(`__VIFR_ROUTES_PATTERN`)
 const {
   routes: { postfix, caseSensitive }
 } = resolvedVifrConfig
@@ -27,48 +26,39 @@ interface ConventionalRoutesContextType {
 const ConventionalRoutesContext =
   React.createContext<ConventionalRoutesContextType>(null!)
 ConventionalRoutesContext.displayName = 'ConventionalRoutesContext'
-function useConventionalRoutes() {
-  return React.useContext(ConventionalRoutesContext)
-}
-function RouteSuspense({
-  children
-}: {
-  children: React.ReactNode
-}): JSX.Element {
-  const { fallback } = useConventionalRoutes()
-  return <React.Suspense fallback={fallback}>{children}</React.Suspense>
-}
-
+// function useConventionalRoutes() {
+//   return React.useContext(ConventionalRoutesContext)
+// }
 function withConventionalRoutes(
-  key: string,
   dynamicImport: () => Promise<{ default: React.ComponentType<any> }>
-): JSX.Element {
+): React.ReactNode {
   const DynamicComponent = React.lazy(dynamicImport)
-  return (
-    <RouteSuspense>
-      <DynamicComponent />
-    </RouteSuspense>
-  )
+  return <DynamicComponent />
 }
+// function PageRoute({ children }: { children: React.ReactNode }): JSX.Element {
+//   const { fallback } = useConventionalRoutes()
+//   return (
+//     <>
+//       <React.Suspense fallback={fallback}>{children}</React.Suspense>
+//     </>
+//   )
+// }
 
-const routes = createRoutes(pages, files, ROUTES_ROOT, {
+// interface ConventionalRoutesProps {
+//   fallback?: ConventionalRoutesContextType['fallback']
+// }
+const routes = createRoutes(pages, ROUTES_ROOT, {
   postfix,
   caseSensitive
 })
-
-interface ConventionalRoutesProps {
-  fallback?: ConventionalRoutesContextType['fallback']
+export const ConventionalRoutes = ({ fallback = null }): any => {
+  return useRoutes(routes)
+  // return (
+  //   <ConventionalRoutesContext.Provider value={{ fallback }}>
+  //     {useRoutes(routes)}
+  //   </ConventionalRoutesContext.Provider>
+  // )
 }
-
-export const ConventionalRoutes = React.memo<ConventionalRoutesProps>(
-  ({ fallback = null }): JSX.Element => {
-    return (
-      <ConventionalRoutesContext.Provider value={{ fallback }}>
-        {useRoutes(routes)}
-      </ConventionalRoutesContext.Provider>
-    )
-  }
-)
 
 interface Options {
   postfix?: string
@@ -76,11 +66,11 @@ interface Options {
 }
 
 function createRoutes(
-  pages: Pages,
-  files: string[],
+  pages: PagesType,
   root: string,
   options?: Options
 ): RouteObject[] {
+  const files = Object.keys(pages)
   const defaultOptions = {
     postfix: '',
     caseSensitive: false
@@ -95,7 +85,7 @@ function createRoutes(
 }
 
 function createRoute(
-  pages: Pages,
+  pages: PagesType,
   files: string[],
   fullFolder: string,
   folder: string,
@@ -126,12 +116,12 @@ function createRoute(
       standbyFile,
       postfix
     )
-    const DynamicComponent = withConventionalRoutes(file, pages[file])
+    const Component = withConventionalRoutes(pages[file])
     if (isRoot && lowerCaseRoutePath === 'root') {
       selfRoute = {
         path: '/',
         caseSensitive,
-        element: DynamicComponent
+        element: Component
       }
       continue
     }
@@ -141,21 +131,21 @@ function createRoute(
       selfRoute = {
         path: routePath,
         caseSensitive,
-        element: DynamicComponent
+        element: Component
       }
       continue
     }
     if (/^index$/.test(lowerCaseRoutePath)) {
       routes.push({
         index: true,
-        element: DynamicComponent
+        element: Component
       })
       continue
     }
     routes.push({
       path: routePath,
       caseSensitive,
-      element: DynamicComponent
+      element: Component
     })
   }
   for (const [dir, files] of Object.entries(deepRoutes)) {
