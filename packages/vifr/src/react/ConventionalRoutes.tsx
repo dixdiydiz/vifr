@@ -2,8 +2,7 @@
 import resolvedVifrConfig from '@vifr-virtual-resolved-config'
 // @ts-ignore
 import type { RouteObject } from 'react-router-dom'
-import type React from 'react'
-import { lazy } from 'react'
+import * as React from 'react'
 // @ts-ignore
 import { useRoutes } from 'react-router-dom'
 import { ROUTES_ROOT } from '../constant'
@@ -21,12 +20,35 @@ const {
   routes: { postfix, caseSensitive }
 } = resolvedVifrConfig
 
+interface ConventionalRoutesContextType {
+  fallback: React.SuspenseProps['fallback']
+}
+
+const ConventionalRoutesContext =
+  React.createContext<ConventionalRoutesContextType>(null!)
+ConventionalRoutesContext.displayName = 'ConventionalRoutesContext'
+function useConventionalRoutes() {
+  return React.useContext(ConventionalRoutesContext)
+}
+function RouteSuspense({
+  children
+}: {
+  children: React.ReactNode
+}): JSX.Element {
+  const { fallback } = useConventionalRoutes()
+  return <React.Suspense fallback={fallback}>{children}</React.Suspense>
+}
+
 function withConventionalRoutes(
   key: string,
   dynamicImport: () => Promise<{ default: React.ComponentType<any> }>
-): React.ReactNode {
-  const DynamicComponent = lazy(dynamicImport)
-  return <DynamicComponent />
+): JSX.Element {
+  const DynamicComponent = React.lazy(dynamicImport)
+  return (
+    <RouteSuspense>
+      <DynamicComponent />
+    </RouteSuspense>
+  )
 }
 
 const routes = createRoutes(pages, files, ROUTES_ROOT, {
@@ -34,9 +56,19 @@ const routes = createRoutes(pages, files, ROUTES_ROOT, {
   caseSensitive
 })
 
-export function ConventionalRoutes(): React.ReactNode {
-  return useRoutes(routes)
+interface ConventionalRoutesProps {
+  fallback?: ConventionalRoutesContextType['fallback']
 }
+
+export const ConventionalRoutes = React.memo<ConventionalRoutesProps>(
+  ({ fallback = null }): JSX.Element => {
+    return (
+      <ConventionalRoutesContext.Provider value={{ fallback }}>
+        {useRoutes(routes)}
+      </ConventionalRoutesContext.Provider>
+    )
+  }
+)
 
 interface Options {
   postfix?: string

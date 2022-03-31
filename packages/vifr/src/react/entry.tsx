@@ -1,4 +1,4 @@
-import React, { createContext, useMemo } from 'react'
+import * as React from 'react'
 import { StaticRouter } from 'react-router-dom/server'
 import { BrowserRouter } from 'react-router-dom'
 
@@ -6,9 +6,7 @@ interface VifrEntryContextType {
   [key: string]: any
 }
 
-const VifrEntryContext = createContext<VifrEntryContextType | undefined>(
-  undefined
-)
+const VifrEntryContext = React.createContext<VifrEntryContextType>(null!)
 VifrEntryContext.displayName = 'VifrEntryContext'
 
 function VifrEntry({
@@ -20,7 +18,7 @@ function VifrEntry({
   location?: string
   children: React.ReactNode
 }): JSX.Element {
-  const entryCtx = useMemo(() => {
+  const entryCtx = React.useMemo(() => {
     return {}
   }, [])
   return (

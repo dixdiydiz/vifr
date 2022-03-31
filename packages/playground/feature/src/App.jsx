@@ -1,5 +1,7 @@
+// import { Suspense } from 'react'
 import { Link, Routes, Route } from 'react-router-dom'
 import { ConventionalRoutes } from 'vifr/react'
+import Spinner from './components/Spinner'
 
 export default function App() {
   return (
@@ -16,9 +18,14 @@ export default function App() {
             About
           </Link>
         </li>
+        <li>
+          <Link to="/onlyhome" reloadDocument>
+            onlyhome
+          </Link>
+        </li>
       </ul>
       <a href="/home">Home aaa1</a>
-      <ConventionalRoutes />
+      <ConventionalRoutes fallback={<Spinner />} />
     </>
   )
 }
