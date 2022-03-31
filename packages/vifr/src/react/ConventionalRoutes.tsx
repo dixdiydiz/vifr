@@ -1,9 +1,7 @@
 // @ts-ignore
 import resolvedVifrConfig from '@vifr-virtual-resolved-config'
-// @ts-ignore
 import type { RouteObject } from 'react-router-dom'
 import * as React from 'react'
-// @ts-ignore
 import { useRoutes } from 'react-router-dom'
 import { ROUTES_ROOT } from '../constant'
 
@@ -19,45 +17,27 @@ const {
   routes: { postfix, caseSensitive }
 } = resolvedVifrConfig
 
-interface ConventionalRoutesContextType {
-  fallback: React.SuspenseProps['fallback']
-}
-
-const ConventionalRoutesContext =
-  React.createContext<ConventionalRoutesContextType>(null!)
-ConventionalRoutesContext.displayName = 'ConventionalRoutesContext'
-// function useConventionalRoutes() {
-//   return React.useContext(ConventionalRoutesContext)
-// }
 function withConventionalRoutes(
   dynamicImport: () => Promise<{ default: React.ComponentType<any> }>
 ): React.ReactNode {
   const DynamicComponent = React.lazy(dynamicImport)
   return <DynamicComponent />
 }
-// function PageRoute({ children }: { children: React.ReactNode }): JSX.Element {
-//   const { fallback } = useConventionalRoutes()
-//   return (
-//     <>
-//       <React.Suspense fallback={fallback}>{children}</React.Suspense>
-//     </>
-//   )
-// }
 
-// interface ConventionalRoutesProps {
-//   fallback?: ConventionalRoutesContextType['fallback']
-// }
+interface ConventionalRoutesProps {
+  fallback?: React.SuspenseProps['fallback']
+}
 const routes = createRoutes(pages, ROUTES_ROOT, {
   postfix,
   caseSensitive
 })
-export const ConventionalRoutes = ({ fallback = null }): any => {
-  return useRoutes(routes)
-  // return (
-  //   <ConventionalRoutesContext.Provider value={{ fallback }}>
-  //     {useRoutes(routes)}
-  //   </ConventionalRoutesContext.Provider>
-  // )
+
+export const ConventionalRoutes = ({
+  fallback = null
+}: ConventionalRoutesProps): any => {
+  return (
+    <React.Suspense fallback={fallback}>{useRoutes(routes)}</React.Suspense>
+  )
 }
 
 interface Options {
