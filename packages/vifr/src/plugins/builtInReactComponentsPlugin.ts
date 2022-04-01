@@ -84,7 +84,7 @@ function transformRoutesImportMetaUrlPlugin(): Plugin {
         const routesPattern = postfix
           ? `"${ROUTES_ROOT}/**/*.${postfix}.(j|t)s?(x)"`
           : `"${ROUTES_ROOT}/**/*.(j|t)s?(x)"`
-        s.replace('`__VIFR_ROUTES_PATTERN`', routesPattern)
+        s.replace('`__VIFR_ROUTES_PATTERN__`', routesPattern)
         return {
           code: s.toString(),
           map: s.generateMap({ hires: true }) ?? null

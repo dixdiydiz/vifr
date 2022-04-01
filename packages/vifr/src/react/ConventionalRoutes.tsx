@@ -12,7 +12,7 @@ interface PagesType {
 }
 
 // @ts-ignore
-const pages: PagesType = import.meta.glob(`__VIFR_ROUTES_PATTERN`)
+const pages: PagesType = import.meta.glob(`__VIFR_ROUTES_PATTERN__`)
 const {
   routes: { postfix, caseSensitive }
 } = resolvedVifrConfig
