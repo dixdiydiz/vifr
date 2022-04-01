@@ -13,7 +13,7 @@ export function render(url, res) {
     {
       bootstrapScriptContent: 'window.BOOT ? BOOT() : (window.LOADED = true)',
       // bootstrapModules: ['/src/entry-client.jsx'],
-      onAllReady() {
+      onShellReady() {
         res.statusCode = 200
         res.setHeader('Content-type', 'text/html')
         pipe(res)

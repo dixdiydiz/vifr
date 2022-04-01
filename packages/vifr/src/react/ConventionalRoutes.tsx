@@ -35,9 +35,8 @@ const routes = createRoutes(pages, ROUTES_ROOT, {
 export const ConventionalRoutes = ({
   fallback = null
 }: ConventionalRoutesProps): any => {
-  return (
-    <React.Suspense fallback={fallback}>{useRoutes(routes)}</React.Suspense>
-  )
+  const element = useRoutes(routes)
+  return <React.Suspense fallback={fallback}>{element}</React.Suspense>
 }
 
 interface Options {
