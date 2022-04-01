@@ -1,6 +1,6 @@
 // import { Suspense } from 'react'
-import { Link, Routes, Route } from 'react-router-dom'
-import { ConventionalRoutes } from 'vifr/react'
+import { Link } from 'react-router-dom'
+import { Routes } from 'vifr/react'
 import Spinner from './components/Spinner'
 
 export default function App() {
@@ -8,6 +8,11 @@ export default function App() {
     <>
       <h3>App Component</h3>
       <ul>
+        <li>
+          <Link to="/otherhome" reloadDocument>
+            other home
+          </Link>
+        </li>
         <li>
           <Link to="/home" reloadDocument>
             Home
@@ -24,7 +29,7 @@ export default function App() {
           </Link>
         </li>
       </ul>
-      <ConventionalRoutes fallback={<Spinner />} />
+      <Routes fallback={<Spinner />} />
     </>
   )
 }

@@ -32,20 +32,19 @@ const routes = createRoutes(pages, ROUTES_ROOT, {
   caseSensitive
 })
 
-const Routes = React.memo(() => {
+const RouteElement = React.memo(() => {
   const element = useRoutes(routes)
   return element
 })
 
-export const ConventionalRoutes = ({
-  fallback = null
-}: ConventionalRoutesProps): any => {
+export const Routes = ({ fallback = null }: ConventionalRoutesProps): any => {
   return (
     <React.Suspense fallback={fallback}>
-      <Routes />
+      <RouteElement />
     </React.Suspense>
   )
 }
+Routes.displayName = 'VifrConventionalRoutes'
 
 interface Options {
   postfix?: string
