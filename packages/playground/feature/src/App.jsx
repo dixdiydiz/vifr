@@ -24,7 +24,6 @@ export default function App() {
           </Link>
         </li>
       </ul>
-      <a href="/home">Home aaa1</a>
       <ConventionalRoutes fallback={<Spinner />} />
     </>
   )

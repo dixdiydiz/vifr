@@ -32,11 +32,19 @@ const routes = createRoutes(pages, ROUTES_ROOT, {
   caseSensitive
 })
 
+const Routes = React.memo(() => {
+  const element = useRoutes(routes)
+  return element
+})
+
 export const ConventionalRoutes = ({
   fallback = null
 }: ConventionalRoutesProps): any => {
-  const element = useRoutes(routes)
-  return <React.Suspense fallback={fallback}>{element}</React.Suspense>
+  return (
+    <React.Suspense fallback={fallback}>
+      <Routes />
+    </React.Suspense>
+  )
 }
 
 interface Options {
