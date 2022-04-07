@@ -1,12 +1,16 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 
 export default function Root() {
+  const { pathname } = useLocation()
   return (
     <>
-      <div>
-        <h4>Root Component</h4>
+      {pathname === '/' ? (
+        <div>
+          <h4>Root Component</h4>
+        </div>
+      ) : (
         <Outlet />
-      </div>
+      )}
     </>
   )
 }
