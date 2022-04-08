@@ -14,7 +14,7 @@ interface PagesType {
 // @ts-ignore
 const pages: PagesType = import.meta.glob(`__VIFR_ROUTES_PATTERN__`)
 const {
-  routes: { postfix, caseSensitive }
+  routes: { suffix, caseSensitive }
 } = resolvedVifrConfig
 
 function withConventionalRoutes(
@@ -28,7 +28,7 @@ interface ConventionalRoutesProps {
   fallback?: React.SuspenseProps['fallback']
 }
 const routes = createRoutes(pages, ROUTES_ROOT, {
-  postfix,
+  suffix,
   caseSensitive
 })
 
@@ -47,7 +47,7 @@ export const Routes = ({ fallback = null }: ConventionalRoutesProps): any => {
 Routes.displayName = 'VifrConventionalRoutes'
 
 interface Options {
-  postfix?: string
+  suffix?: string
   caseSensitive?: boolean
 }
 
@@ -58,7 +58,7 @@ function createRoutes(
 ): RouteObject[] {
   const files = Object.keys(pages)
   const defaultOptions = {
-    postfix: '',
+    suffix: '',
     caseSensitive: false
   }
   return createRoute(
@@ -77,7 +77,7 @@ function createRoute(
   folder: string,
   options: Required<Options>
 ): RouteObject[] {
-  const { postfix, caseSensitive } = options
+  const { suffix, caseSensitive } = options
   const lowerCaseFolder = folder.toLowerCase()
   const isRoot = fullFolder === folder
   const routes: RouteObject[] = []
@@ -100,7 +100,7 @@ function createRoute(
     }
     const { routePath, lowerCaseRoutePath } = normalizeRoutePath(
       standbyFile,
-      postfix
+      suffix
     )
     const Component = withConventionalRoutes(pages[file])
     if (isRoot && lowerCaseRoutePath === 'root') {
@@ -172,12 +172,12 @@ function createRoute(
 
 function normalizeRoutePath(
   path: string,
-  postfix: string
+  suffix: string
 ): {
   routePath: string
   lowerCaseRoutePath: string
 } {
-  const postfixGroup = postfix ? postfix.split('.') : []
+  const postfixGroup = suffix ? suffix.split('.') : []
   let pathGroup = path.split('.')
   pathGroup = pathGroup.slice(0, pathGroup.length - postfixGroup.length - 1)
   const routePath = pathGroup.reduce((res, curr) => {

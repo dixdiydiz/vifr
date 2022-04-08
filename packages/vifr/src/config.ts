@@ -21,7 +21,7 @@ export interface InlineConfig extends ViteInlineConfig {
 }
 
 export type RoutesConfig = {
-  postfix?: string
+  suffix?: string
   caseSensitive?: boolean
 }
 
@@ -66,19 +66,19 @@ export function lookupConfigFile(configFile?: string | null | false): string {
       return configFile
     }
   }
-  const legalPostfix = ['.ts', '.js', '.mjs', '.cjs']
-  for (let postfix of legalPostfix) {
-    const file = `vifr.config${postfix}`
+  const legalSuffix = ['.ts', '.js', '.mjs', '.cjs']
+  for (let suffix of legalSuffix) {
+    const file = `vifr.config${suffix}`
     if (fs.existsSync(path.resolve(file))) {
       return file
     }
   }
   let errMsg = 'no config file found.'
   // check for vite config file
-  for (let postfix of legalPostfix) {
-    const file = `vite.config${postfix}`
+  for (let suffix of legalSuffix) {
+    const file = `vite.config${suffix}`
     if (fs.existsSync(path.resolve(file))) {
-      errMsg = `vifr: config file must use vifr.config.${postfix} instead of ${file}`
+      errMsg = `vifr: config file must use vifr.config.${suffix} instead of ${file}`
     }
   }
   const err = new Error(errMsg)

@@ -16,19 +16,19 @@ export function resolvedVifrConfigPlugin(): Plugin {
     enforce: 'pre',
     configResolved(resolvedConfig) {
       let {
-        routes: { postfix, caseSensitive } = {
-          postfix: '',
+        routes: { suffix, caseSensitive } = {
+          suffix: '',
           caseSensitive: false
         }
       } = resolvedConfig as VifrResolvedConfig
-      postfix = isString(postfix)
-        ? postfix
+      suffix = isString(suffix)
+        ? suffix
             .split('.')
             .reduce((res, segment) => (segment ? `${res}.${segment}` : res))
         : ''
       caseSensitive = Boolean(caseSensitive)
       resolvedVifrConfig = {
-        routes: { postfix, caseSensitive }
+        routes: { suffix, caseSensitive }
       }
     },
     resolveId(id: string) {
@@ -79,10 +79,10 @@ function transformRoutesImportMetaUrlPlugin(): Plugin {
       if (id.includes('vifr/dist/react/vifr-react.js')) {
         const s = new MagicString(code)
         const {
-          routes: { postfix }
+          routes: { suffix }
         } = resolvedVifrConfig
-        const routesPattern = postfix
-          ? `"${ROUTES_ROOT}/**/*.${postfix}.(j|t)s?(x)"`
+        const routesPattern = suffix
+          ? `"${ROUTES_ROOT}/**/*.${suffix}.(j|t)s?(x)"`
           : `"${ROUTES_ROOT}/**/*.(j|t)s?(x)"`
         s.replace('`__VIFR_ROUTES_PATTERN__`', routesPattern)
         return {
