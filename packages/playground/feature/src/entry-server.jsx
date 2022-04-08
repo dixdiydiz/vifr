@@ -12,7 +12,7 @@ export function render(url, res) {
     </VifrServer>,
     {
       bootstrapScriptContent: 'window.BOOT ? BOOT() : (window.LOADED = true)',
-      // bootstrapModules: ['/src/entry-client.jsx'],
+      // bootstrapModules: ['/src/entry-client.jsx'], onShellReady onAllReady
       onShellReady() {
         res.statusCode = 200
         res.setHeader('Content-type', 'text/html')
