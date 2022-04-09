@@ -12,13 +12,13 @@
     "debug": "node --inspect-brk server"
   },
   "dependencies": {
-    "react": "^18.0.0-next-3e997fdba-20220329",
-    "react-dom": "^18.0.0-next-3e997fdba-20220329"
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   },
   "devDependencies": {
-    "vifr": "workspace:*",
     "compression": "^1.7.4",
     "express": "^4.17.1",
-    "serve-static": "^1.14.1"
+    "serve-static": "^1.14.1",
+    "vifr": "workspace:*"
   }
 }

@@ -6,7 +6,7 @@ import Spinner from './components/Spinner'
 export default function App() {
   return (
     <>
-      <h3>App Component</h3>
+      <h3>App Component1</h3>
       <ul>
         <li>
           <Link to="/otherhome" reloadDocument>
