@@ -17,8 +17,9 @@ interface MarkTag {
   fullStr: string
 }
 
-const EntryTemplate =
-  '<html><head><script type="module" src="/src/entry-client.jsx"></script></head></html>'
+// const EntryTemplate =
+// '<html><head><script type="module" src="/src/entry-client.jsx"></script></head></html>'
+const EntryTemplate = '<html><head></head></html>'
 const htmlRE = /<html>[^]*<head>([^]*)<\/head>[^]*<\/html>/i
 
 export const headCache: Record<string, any> = Object.defineProperties(
@@ -92,8 +93,8 @@ function serializeHead(html: string): string {
         ? `${openTagStr} dangerouslySetInnerHTML={{__html: '${text.replace(
             /\n/g,
             ';'
-          )}'}} />`
-        : `${openTagStr} />`
+          )}'}} async />`
+        : `${openTagStr} async />`
     )
   }
 

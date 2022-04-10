@@ -4,7 +4,7 @@ const path = require('path')
 const express = require('express')
 const {
   createVifrServer,
-  createLoadSsrEntryModule,
+  loadServerEntryModule,
   ssrFixStacktrace
 } = require('vifr')
 
@@ -37,10 +37,9 @@ async function createServer(
   app.use('*', async (req, res) => {
     try {
       const url = req.originalUrl
-
       let html
       if (!isProd) {
-        const { render } = await createLoadSsrEntryModule(url)
+        const render = await loadServerEntryModule(url)
         render(url, res)
       } else {
         const render = require('./dist/server/entry-server.js').render

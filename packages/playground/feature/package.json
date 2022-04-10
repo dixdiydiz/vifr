@@ -12,8 +12,8 @@
     "debug": "node --inspect-brk server"
   },
   "dependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react": "^18.1.0-next-5b2e7253f-20220408",
+    "react-dom": "^18.1.0-next-5b2e7253f-20220408"
   },
   "devDependencies": {
     "compression": "^1.7.4",

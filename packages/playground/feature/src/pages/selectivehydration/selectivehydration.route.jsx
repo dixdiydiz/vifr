@@ -1,21 +1,35 @@
 import { DataProvider } from './fakeData'
 import { useState, useTransition, Suspense, lazy, useId } from 'react'
+import * as React from 'react'
 const Comments = lazy(() => import('./Comments'))
+
+const LazyComments = React.memo(() => {
+  return (
+    <>
+      <Suspense fallback={<div>laoding1...</div>}>
+        <Comments />
+      </Suspense>
+    </>
+  )
+})
 
 export default function () {
   const [count, setCount] = useState(0)
   const [isPending, startTransition] = useTransition()
-  const id = useId()
+  const id1 = useId()
+  const id2 = useId()
+  const id3 = useId()
   return (
     <>
       <h1>selectivehydration</h1>
-      <p>{id}</p>
+      <p>{id1}</p>
+      <p>
+        {id2}/{id3}
+      </p>
       <p>You clicked {count} times</p>
       {/*<button onClick={() => startTransition(() => setCount((c) => c + 1))}>*/}
       <button onClick={() => setCount((c) => c + 1)}>click me</button>
-      <Suspense fallback={<div>laoding1...</div>}>
-        <Comments />
-      </Suspense>
+      <LazyComments />
     </>
   )
 }

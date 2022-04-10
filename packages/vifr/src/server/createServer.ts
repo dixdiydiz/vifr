@@ -4,6 +4,7 @@ import path from 'path'
 import { createServer as ViteCreateServer } from 'vite'
 import { resolveConfig } from '../config'
 import { transformIndexHtml } from './transformIndexHtml'
+import { invariant } from '../utils'
 
 export { ViteDevServer, InlineConfig }
 
@@ -28,14 +29,15 @@ export async function ssrTransformIndexHtml(url: string, template: string) {
   return await viteServer!.transformIndexHtml(url, template)
 }
 
-export async function createLoadSsrEntryModule(
+export async function loadServerEntryModule(
   url: string,
   root: string = process.cwd()
 ): Promise<Record<string, any>> {
   await transformIndexHtml(url)
-  const render = await viteServer!.ssrLoadModule(
+  const { default: render } = await viteServer!.ssrLoadModule(
     path.resolve(root, 'src/entry-server.jsx')
   )
+  invariant(render, 'entry-server should export a default function.')
   return render
 }
 

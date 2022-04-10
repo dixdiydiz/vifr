@@ -1,3 +1,5 @@
+import { logger } from './logger'
+
 export const isString = (arg: unknown): arg is string => typeof arg === 'string'
 
 export const isArray = (arg: unknown): arg is any[] => Array.isArray(arg)
@@ -15,6 +17,18 @@ export const isAsyncFunction = (arg: unknown): boolean =>
   toString(arg) == 'AsyncFunction'
 export const isGeneratorFunction = (arg: unknown): boolean =>
   toString(arg) == 'GeneratorFunction'
+
+export function invariant<T>(
+  value: T | null | undefined,
+  message?: string
+): asserts value is T
+export function invariant(value: any, message?: string) {
+  if (value === false || value == null) {
+    const error = new Error(message)
+    logger.error(message ?? '', { error: error })
+    throw error
+  }
+}
 
 export function loadPlugin(path: string): Promise<any> {
   return import(path).then((module) => module.default || module)

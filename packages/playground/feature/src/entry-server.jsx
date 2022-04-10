@@ -30,7 +30,7 @@ function createServerData() {
 
 const data = createServerData()
 
-export function render(url, res) {
+export default function render(url, res) {
   const { pipe, abort } = renderToPipeableStream(
     <VifrServer location={url}>
       <ErrorBoundary>
@@ -40,12 +40,18 @@ export function render(url, res) {
       </ErrorBoundary>
     </VifrServer>,
     {
-      bootstrapScriptContent: 'window.BOOT ? BOOT() : (window.LOADED = true)',
-      // bootstrapModules: ['/src/entry-client.jsx'], onShellReady onAllReady
+      bootstrapScriptContent:
+        'window.BOOT ? BOOT() : (window.LOADED = true);console.log(1)',
+      bootstrapModules: ['/src/entry-client.jsx'],
+      // onShellReady onAllReady
       onShellReady() {
         res.statusCode = 200
         res.setHeader('Content-type', 'text/html')
         pipe(res)
+      },
+      onAllReady() {
+        res.write(`
+          <script>window.__VIFR_USEDATA__ = {':R1q:': () => {console.log('eeee')}}</script>`)
       },
       onError(x) {
         res.statusCode = 500

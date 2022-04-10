@@ -1,9 +1,11 @@
 // import { Suspense } from 'react'
 import { Link } from 'react-router-dom'
 import { Routes } from 'vifr/react'
+import { useState } from 'react'
 import Spinner from './components/Spinner'
 
 export default function App() {
+  const [count, setCount] = useState(0)
   return (
     <>
       <h3>App Component1</h3>
@@ -29,6 +31,8 @@ export default function App() {
           </Link>
         </li>
       </ul>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount((c) => c + 1)}>click me</button>
       <Routes fallback={<Spinner />} />
     </>
   )

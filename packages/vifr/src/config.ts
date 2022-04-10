@@ -7,8 +7,9 @@ import fs from 'fs'
 import path from 'path'
 import colors from 'picocolors'
 // import debug from 'debug'
-import { createLogger, resolveConfig as ViteResolveConfig } from 'vite'
+import { resolveConfig as ViteResolveConfig } from 'vite'
 import reactPlugin from '@vitejs/plugin-react'
+import { loggerPrefix, createLogger } from './logger'
 import builtInReactComponentsPlugin from './plugins/builtInReactComponentsPlugin'
 import { isObject } from './utils'
 
@@ -29,14 +30,6 @@ export interface VifrResolvedConfig extends ViteResolvedConfig {
   routes?: RoutesConfig
 }
 
-// define vifr logger
-// const logger = createLogger(config.logLevel, {
-//   allowClearScreen: config.clearScreen,
-//   customLogger: config.customLogger
-// })
-
-// const configDebug = debug('vifr:config')
-
 export interface ResolveConfig {
   viteResolvedConfig: ViteResolvedConfig
   overrideConfig: ViteInlineConfig
@@ -51,7 +44,11 @@ export async function resolveConfig(
   let { configFile = null } = inlineConfig
   configFile = lookupConfigFile(configFile)
   const viteResolvedConfig = await ViteResolveConfig({ configFile }, command)
-  const overrideConfig = mergeConfig(inlineConfig, configFile)
+  const overrideConfig = mergeConfig(
+    viteResolvedConfig,
+    inlineConfig,
+    configFile
+  )
   return {
     viteResolvedConfig,
     overrideConfig,
@@ -73,30 +70,40 @@ export function lookupConfigFile(configFile?: string | null | false): string {
       return file
     }
   }
-  let errMsg = 'no config file found.'
+  let errorMessage = 'no config file found.'
   // check for vite config file
   for (let suffix of legalSuffix) {
     const file = `vite.config${suffix}`
     if (fs.existsSync(path.resolve(file))) {
-      errMsg = `vifr: config file must use vifr.config.${suffix} instead of ${file}`
+      errorMessage = `vifr: config file must use vifr.config.${suffix} instead of ${file}`
     }
   }
-  const err = new Error(errMsg)
-  createLogger('error', { prefix: '[vifr]' }).error(colors.red(errMsg), {
-    error: err
-  })
+  const err = new Error(errorMessage)
+  console.error(`${colors.red(colors.bold(loggerPrefix))} ${errorMessage}`)
   throw err
 }
 
 function mergeConfig(
+  resolvedConfig: ViteResolvedConfig,
   inlineConfig: InlineConfig = {},
   configFile: string
 ): ViteInlineConfig {
-  const { plugins: inlinePlugins = [], server = {} } = inlineConfig
+  const {
+    logLevel: inlineLogLevel,
+    clearScreen: inlineClearScreen,
+    plugins: inlinePlugins = [],
+    server = {}
+  } = inlineConfig
+  const { logLevel: resolvedLogLevel, clearScreen: resolvedClearScreen } =
+    resolvedConfig
+  const logLevel = inlineLogLevel ?? resolvedLogLevel ?? 'info'
+  const allowClearScreen = inlineClearScreen ?? resolvedClearScreen ?? true
+  const logger = createLogger(logLevel, { allowClearScreen })
   const overrideConfig = Object.assign(
     {},
     {
       configFile,
+      customLogger: logger,
       plugins: [...inlinePlugins, reactPlugin(), builtInReactComponentsPlugin()]
     },
     {
