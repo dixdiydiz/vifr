@@ -17,8 +17,6 @@ interface MarkTag {
   fullStr: string
 }
 
-// const EntryTemplate =
-// '<html><head><script type="module" src="/src/entry-client.jsx"></script></head></html>'
 const EntryTemplate = '<html><head></head></html>'
 const htmlRE = /<html>[^]*<head>([^]*)<\/head>[^]*<\/html>/i
 
