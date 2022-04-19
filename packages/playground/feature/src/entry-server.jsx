@@ -30,7 +30,7 @@ function createServerData() {
 
 const data = createServerData()
 
-export default function render(url, res) {
+export default function (url, res) {
   const { pipe, abort } = renderToPipeableStream(
     <VifrServer location={url}>
       <ErrorBoundary>
