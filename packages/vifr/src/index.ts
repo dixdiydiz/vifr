@@ -1,8 +1,5 @@
-import type { ViteDevServer } from 'vite'
-import type { InlineConfig } from './config'
+import type { RoutesConfig, InlineConfig, VifrResolvedConfig } from './config'
 
-type VifrDevServer = ViteDevServer
-
-export { VifrDevServer, InlineConfig }
+export { InlineConfig, VifrResolvedConfig, RoutesConfig }
 
 export * from './server/createServer'

@@ -24,7 +24,7 @@ function withConventionalRoutes(
   return <DynamicComponent />
 }
 
-interface ConventionalRoutesProps {
+export interface ConventionalRoutesProps {
   fallback?: React.SuspenseProps['fallback']
 }
 const routes = createRoutes(pages, ROUTES_ROOT, {
@@ -83,7 +83,7 @@ function createRoute(
   const routes: RouteObject[] = []
   const deepRoutes = Object.create(null)
   let selfRoute: RouteObject | null = null
-  for (let file of files) {
+  for (const file of files) {
     const isValidPath = file.includes(fullFolder)
     if (!isValidPath) {
       continue

@@ -11,8 +11,7 @@ const toString = (arg: unknown): string => (
 
 export const isObject = (arg: unknown): boolean => toString(arg) === 'Object'
 
-export const isFunction = (arg: unknown): arg is Function =>
-  arg instanceof Function
+export const isFunction = (arg: unknown): boolean => arg instanceof Function
 export const isAsyncFunction = (arg: unknown): boolean =>
   toString(arg) == 'AsyncFunction'
 export const isGeneratorFunction = (arg: unknown): boolean =>
@@ -28,8 +27,4 @@ export function invariant(value: any, message?: string) {
     logger.error(message ?? '', { error: error })
     throw error
   }
-}
-
-export function loadPlugin(path: string): Promise<any> {
-  return import(path).then((module) => module.default || module)
 }

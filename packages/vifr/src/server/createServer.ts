@@ -18,8 +18,7 @@ let viteServer: ViteDevServer | null = null
 export async function createVifrServer(
   inlineConfig: InlineConfig = {}
 ): Promise<VifrDevServer> {
-  const mode = 'development'
-  const { overrideConfig } = await resolveConfig(inlineConfig, 'serve', mode)
+  const { overrideConfig } = await resolveConfig(inlineConfig, 'serve')
   viteServer = await ViteCreateServer(overrideConfig)
   return {
     middlewares: viteServer.middlewares

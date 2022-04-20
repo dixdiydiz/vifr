@@ -9,8 +9,9 @@ import colors from 'picocolors'
 // import debug from 'debug'
 import { resolveConfig as ViteResolveConfig } from 'vite'
 import reactPlugin from '@vitejs/plugin-react'
+import { pluginCollection } from '@vifr/react'
+import { headCache } from './server/transformIndexHtml'
 import { loggerPrefix, createLogger } from './logger'
-import builtInReactComponentsPlugin from './plugins/builtInReactComponentsPlugin'
 import { isObject } from './utils'
 
 export interface InlineConfig extends ViteInlineConfig {
@@ -38,8 +39,7 @@ export interface ResolveConfig {
 
 export async function resolveConfig(
   inlineConfig: InlineConfig = {},
-  command: 'build' | 'serve',
-  defaultMode = 'development'
+  command: 'build' | 'serve'
 ): Promise<ResolveConfig> {
   let { configFile = null } = inlineConfig
   configFile = lookupConfigFile(configFile)
@@ -64,7 +64,7 @@ export function lookupConfigFile(configFile?: string | null | false): string {
     }
   }
   const legalSuffix = ['.ts', '.js', '.mjs', '.cjs']
-  for (let suffix of legalSuffix) {
+  for (const suffix of legalSuffix) {
     const file = `vifr.config${suffix}`
     if (fs.existsSync(path.resolve(file))) {
       return file
@@ -72,7 +72,7 @@ export function lookupConfigFile(configFile?: string | null | false): string {
   }
   let errorMessage = 'no config file found.'
   // check for vite config file
-  for (let suffix of legalSuffix) {
+  for (const suffix of legalSuffix) {
     const file = `vite.config${suffix}`
     if (fs.existsSync(path.resolve(file))) {
       errorMessage = `vifr: config file must use vifr.config.${suffix} instead of ${file}`
@@ -104,7 +104,11 @@ function mergeConfig(
     {
       configFile,
       customLogger: logger,
-      plugins: [...inlinePlugins, reactPlugin(), builtInReactComponentsPlugin()]
+      plugins: [
+        ...inlinePlugins,
+        reactPlugin(),
+        pluginCollection({ headCache })
+      ]
     },
     {
       server: Object.assign({}, isObject(server) && server, {

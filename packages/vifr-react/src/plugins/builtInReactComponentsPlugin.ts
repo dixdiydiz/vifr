@@ -1,14 +1,12 @@
 import type { Plugin } from 'vite'
 import MagicString from 'magic-string'
 import { transformAsync } from '@babel/core'
-import { isString, loadPlugin } from '../utils'
+// import {  } from 'vifr'
 import { ROUTES_ROOT } from '../constant'
-import { headCache } from '../server/transformIndexHtml'
-import type { VifrResolvedConfig } from '../config'
 
-let resolvedVifrConfig: Required<Pick<VifrResolvedConfig, 'routes'>>
+let resolvedVifrConfig: Record<string, any>
 
-export function resolvedVifrConfigPlugin(): Plugin {
+function resolvedVifrConfigPlugin(): Plugin {
   const virtualModuleId = '@vifr-virtual-resolved-config'
   const resolvedVirtualModuleId = '\0' + virtualModuleId
   return {
@@ -16,16 +14,18 @@ export function resolvedVifrConfigPlugin(): Plugin {
     enforce: 'pre',
     configResolved(resolvedConfig) {
       let {
+        // @ts-ignore
         routes: { suffix, caseSensitive } = {
           suffix: '',
           caseSensitive: false
         }
-      } = resolvedConfig as VifrResolvedConfig
-      suffix = isString(suffix)
-        ? suffix
-            .split('.')
-            .reduce((res, segment) => (segment ? `${res}.${segment}` : res))
-        : ''
+      } = resolvedConfig
+      suffix =
+        typeof suffix === 'string'
+          ? suffix
+              .split('.')
+              .reduce((res, segment) => (segment ? `${res}.${segment}` : res))
+          : ''
       caseSensitive = Boolean(caseSensitive)
       resolvedVifrConfig = {
         routes: { suffix, caseSensitive }
@@ -43,7 +43,7 @@ export function resolvedVifrConfigPlugin(): Plugin {
   }
 }
 
-function virtualHeadPlugin(): Plugin {
+function virtualHeadPlugin(headCache: Record<string, any>): Plugin {
   const virtualModuleId = '@vifr-virtual-head'
   const resolvedVirtualModuleId = '\0' + virtualModuleId
   return {
@@ -95,10 +95,18 @@ function transformRoutesImportMetaUrlPlugin(): Plugin {
   }
 }
 
-export default function (): Plugin[] {
+function loadPlugin(path: string): Promise<any> {
+  return import(path).then((module) => module.default || module)
+}
+
+export function pluginCollection({
+  headCache
+}: {
+  headCache: Record<string, any>
+}): Plugin[] {
   return [
     resolvedVifrConfigPlugin(),
-    virtualHeadPlugin(),
+    virtualHeadPlugin(headCache),
     transformRoutesImportMetaUrlPlugin()
   ]
 }

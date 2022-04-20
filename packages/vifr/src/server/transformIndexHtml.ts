@@ -37,20 +37,20 @@ export const headCache: Record<string, any> = Object.defineProperties(
 export async function transformIndexHtml(
   url: string
 ): Promise<TransformIndexHtmlDescriptor> {
-  let res = { head: '', body: '' }
+  const res = { head: '', body: '' }
   const html = await ssrTransformIndexHtml(url, EntryTemplate)
   const matcher = htmlRE.exec(html)
   if (isArray(matcher)) {
-    const [_, head] = matcher
+    const [, head] = matcher
     res.head = headCache[head] ?? serializeHead(head)
   }
   return res
 }
 
 function serializeHead(html: string): string {
-  let isScriptTag: boolean = false
+  let isScriptTag = false
   let stackIndex = -1
-  let stack: MarkTag[] = []
+  const stack: MarkTag[] = []
   const parser = new htmlparser.Parser({
     onopentag(name) {
       if (name === 'script') {
@@ -83,7 +83,7 @@ function serializeHead(html: string): string {
   parser.write(html)
   parser.end()
   let transformHtml = html
-  for (let mark of stack) {
+  for (const mark of stack) {
     const { openTagStr, text, fullStr } = mark
     transformHtml = transformHtml.replace(
       fullStr,

@@ -21,9 +21,11 @@ module.exports = defineConfig({
       }
     ],
     semi: ['error', 'never'],
-    quotes: ['error', 'single'],
+    quotes: 0,
     'no-empty': ['warn', { allowEmptyCatch: true }],
     '@typescript-eslint/ban-ts-comment': 0,
-    '@typescript-eslint/no-var-requires': 0
+    '@typescript-eslint/no-var-requires': 0,
+    '@typescript-eslint/no-explicit-any': 0,
+    '@typescript-eslint/no-non-null-assertion': 0
   }
 })

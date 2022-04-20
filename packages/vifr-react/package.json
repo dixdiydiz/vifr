@@ -1,40 +1,39 @@
 {
-  "name": "vifr",
+  "name": "@vifr/react",
   "version": "0.0.1",
-  "description": "Vite-based React Framework",
-  "bin": {
-    "vifr": "dist/cli.js"
-  },
+  "description": "vifr react components",
+  "main": "index.js",
   "scripts": {
     "dev": "rimraf dist && rollup -c -w",
     "build": "rimraf dist && run-s lint build-bundle build-temp-types roll-types",
     "build-bundle": "rollup -c",
-    "build-temp-types": "tsc --emitDeclarationOnly --declarationDir temp",
+    "build-temp-types": "tsc --emitDeclarationOnly",
     "roll-types": "api-extractor run && rimraf temp",
     "lint": "eslint --ext .ts,.tsx src/**",
     "format": "prettier --write --parser typescript \"src/**/*.ts\"",
     "prepublishOnly": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "type": "module",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": "./dist/index.js"
   },
   "devDependencies": {
-    "@types/babel__core": "^7.1.18",
-    "@types/debug": "^4.1.7",
-    "debug": "^4.3.3",
-    "picocolors": "^1.0.0"
+    "vifr": "workspace:*",
+    "vite": "^2.9.5"
   },
   "dependencies": {
-    "@vifr/react": "workspace:*",
-    "@vitejs/plugin-react": "^1.2.0",
-    "cac": "^6.7.12",
-    "chalk": "^5.0.0",
-    "htmlparser2": "^7.2.0",
+    "@babel/core": "^7.17.5",
+    "@babel/plugin-transform-react-jsx": "^7.17.3",
     "magic-string": "^0.26.1",
-    "vite": "^2.9.5"
+    "react-router-dom": "^6.2.2"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18",
+    "react-router": ">=6",
+    "react-router-dom": ">=6"
   },
   "packageManager": "pnpm@6.32.2",
   "engines": {
