@@ -3,7 +3,7 @@
   "name": "vifr-monorepo",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "dev": "run-s dev-vifr dev-vifr-react",
+    "dev": "run-p dev-vifr dev-vifr-react",
     "dev-vifr": "cd packages/vifr && npm run dev",
     "dev-vifr-react": "cd packages/vifr-react && npm run dev",
     "build": "run-s build-vifr build-vifr-react",
