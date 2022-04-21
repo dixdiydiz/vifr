@@ -3,8 +3,9 @@ import nodeResolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import typescript from 'rollup-plugin-typescript2'
 
+const pkg = require('./package.json')
+
 function licensePlugin() {
-  const pkg = require(`./package.json`)
   const licenseText =
     `/**` +
     ` \n * ${pkg.name}@v${pkg.version} is released under the MIT license found in the` +
@@ -30,7 +31,7 @@ function vifr(commandLineArgs) {
   const OUTPUT_DIR = 'dist'
   return [
     {
-      input: [`src/cli.ts`, `src/index.ts`],
+      input: ['src/cli.ts', 'src/index.ts'],
       output: {
         dir: OUTPUT_DIR,
         format: 'cjs',

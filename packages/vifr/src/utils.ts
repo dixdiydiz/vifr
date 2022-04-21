@@ -11,7 +11,12 @@ const toString = (arg: unknown): string => (
 
 export const isObject = (arg: unknown): boolean => toString(arg) === 'Object'
 
-export const isFunction = (arg: unknown): boolean => arg instanceof Function
+export const isFunction = (arg: unknown): boolean =>
+  !!arg &&
+  (toString(arg) === '[object Function]' ||
+    'function' === typeof arg ||
+    arg instanceof Function)
+
 export const isAsyncFunction = (arg: unknown): boolean =>
   toString(arg) == 'AsyncFunction'
 export const isGeneratorFunction = (arg: unknown): boolean =>

@@ -4,8 +4,9 @@ import commonjs from '@rollup/plugin-commonjs'
 import typescript from 'rollup-plugin-typescript2'
 import { babel } from '@rollup/plugin-babel'
 
+const pkg = require(`./package.json`)
+
 function licensePlugin() {
-  const pkg = require(`./package.json`)
   const licenseText =
     `/**` +
     ` \n * ${pkg.name}@v${pkg.version} is released under the MIT license found in the` +
@@ -32,14 +33,21 @@ function vifrReact(commandLineArgs) {
   const virtualModuleReg = /@vifr-virtual/
   return [
     {
-      input: [`src/index.ts`],
+      input: ['src/index.ts'],
       output: {
         dir: OUTPUT_DIR,
         entryFileNames: `[name].js`,
         exports: 'named',
         format: 'es'
       },
-      external: [/node_modules/, /@babel\/runtime/, /^react/, virtualModuleReg],
+      external: [
+        /node_modules/,
+        'vifr',
+        /^@vifr/,
+        /@babel\/runtime/,
+        /^react/,
+        virtualModuleReg
+      ],
       plugins: [
         nodeResolve({ extensions: ['.ts', '.tsx'] }),
         commonjs(),
@@ -75,6 +83,6 @@ function vifrReact(commandLineArgs) {
   ]
 }
 
-export default (commandLineArgs) => {
-  return [...vifrReact(commandLineArgs)]
+export default (commandLineArgs, prefix) => {
+  return [...vifrReact(commandLineArgs, prefix)]
 }

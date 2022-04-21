@@ -1,7 +1,6 @@
 import type { Plugin } from 'vite'
 import MagicString from 'magic-string'
 import { transformAsync } from '@babel/core'
-// import {  } from 'vifr'
 import { ROUTES_ROOT } from '../constant'
 
 let resolvedVifrConfig: Record<string, any>
@@ -14,7 +13,7 @@ function resolvedVifrConfigPlugin(): Plugin {
     enforce: 'pre',
     configResolved(resolvedConfig) {
       let {
-        // @ts-ignore
+        //@ts-ignore
         routes: { suffix, caseSensitive } = {
           suffix: '',
           caseSensitive: false
