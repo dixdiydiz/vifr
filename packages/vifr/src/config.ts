@@ -9,8 +9,8 @@ import colors from 'picocolors'
 // import debug from 'debug'
 import { resolveConfig as ViteResolveConfig } from 'vite'
 import reactPlugin from '@vitejs/plugin-react'
-import { pluginCollection } from '@vifr/react'
-import { headCache } from './server/transformIndexHtml'
+import { headCache } from './dev/transformIndexHtml'
+import pluginCollection from './plugins/builtInReactComponentsPlugin'
 import { loggerPrefix, createLogger } from './logger'
 import { isObject } from './utils'
 
@@ -44,7 +44,7 @@ export async function resolveConfig(
   let { configFile = null } = inlineConfig
   configFile = lookupConfigFile(configFile)
   const viteResolvedConfig = await ViteResolveConfig({ configFile }, command)
-  const overrideConfig = mergeConfig(
+  const overrideConfig = await mergeConfig(
     viteResolvedConfig,
     inlineConfig,
     configFile
@@ -83,11 +83,11 @@ export function lookupConfigFile(configFile?: string | null | false): string {
   throw err
 }
 
-function mergeConfig(
+async function mergeConfig(
   resolvedConfig: ViteResolvedConfig,
   inlineConfig: InlineConfig = {},
   configFile: string
-): ViteInlineConfig {
+): Promise<ViteInlineConfig> {
   const {
     logLevel: inlineLogLevel,
     clearScreen: inlineClearScreen,

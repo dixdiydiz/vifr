@@ -6,7 +6,8 @@ const {
   createVifrServer,
   renderServerEntry,
   ssrFixStacktrace
-} = require('vifr')
+} = require('vifr/dev')
+const { isFunction } = require('vifr')
 
 const isTest = process.env.NODE_ENV === 'test' || !!process.env.VITE_TEST_BUILD
 

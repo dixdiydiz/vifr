@@ -3,12 +3,10 @@
   "name": "vifr-monorepo",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "dev": "run-p dev-vifr dev-vifr-react",
+    "dev": "run-s dev-vifr",
     "dev-vifr": "cd packages/vifr && npm run dev",
-    "dev-vifr-react": "cd packages/vifr-react && npm run dev",
-    "build": "run-s build-vifr build-vifr-react",
-    "build-vifr": "cd packages/vifr && npm run build",
-    "build-vifr-react": "cd packages/vifr-react && npm run build"
+    "build": "run-s build-vifr",
+    "build-vifr": "cd packages/vifr && npm run build"
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.17.0",

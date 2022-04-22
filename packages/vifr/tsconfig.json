@@ -14,6 +14,7 @@
     "useUnknownInCatchVariables": false,
     "declaration": true,
     "declarationDir": "dist",
+    "jsx": "react-jsx",
     "types": ["node"],
   }
 }

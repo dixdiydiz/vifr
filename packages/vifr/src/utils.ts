@@ -17,11 +17,6 @@ export const isFunction = (arg: unknown): boolean =>
     'function' === typeof arg ||
     arg instanceof Function)
 
-export const isAsyncFunction = (arg: unknown): boolean =>
-  toString(arg) == 'AsyncFunction'
-export const isGeneratorFunction = (arg: unknown): boolean =>
-  toString(arg) == 'GeneratorFunction'
-
 export function invariant<T>(
   value: T | null | undefined,
   message?: string

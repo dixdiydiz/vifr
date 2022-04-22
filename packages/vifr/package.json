@@ -3,23 +3,47 @@
   "version": "0.0.1",
   "description": "Vite-based React Framework",
   "bin": {
-    "vifr": "dist/cli.js"
+    "vifr": "./dist/cli.js"
   },
   "scripts": {
     "dev": "rimraf dist && rollup -c -w",
     "build": "rimraf dist && run-s lint build-bundle build-temp-types roll-types",
     "build-bundle": "rollup -c",
     "build-temp-types": "tsc --emitDeclarationOnly --declarationDir temp",
-    "roll-types": "api-extractor run && rimraf temp",
+    "roll-types": "run-s roll-types-vifr roll-types-vifr-react roll-types-vifr-dev && rimraf temp",
+    "roll-types-vifr": "api-extractor run -c api-extractor-vifr.json",
+    "roll-types-vifr-react": "api-extractor run -c api-extractor-vifr-react.json",
+    "roll-types-vifr-dev": "api-extractor run -c api-extractor-vifr-dev.json",
     "lint": "eslint --ext .ts,.tsx src/**",
     "format": "prettier --write --parser typescript \"src/**/*.ts\"",
     "prepublishOnly": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./dist/index.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./react":{
+      "types": "./dist/react/index.d.ts",
+      "default": "./dist/react/index.js"
+    },
+    "./dev": {
+      "types": "./dist/dev/index.d.ts",
+      "default": "./dist/dev/index.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "react": [
+        "dist/react/index.d.ts"
+      ],
+      "dev": [
+        "dist/dev/index.d.ts"
+      ]
+    }
   },
   "devDependencies": {
     "@types/babel__core": "^7.1.18",
@@ -28,13 +52,17 @@
     "picocolors": "^1.0.0"
   },
   "dependencies": {
-    "@vifr/react": "workspace:*",
     "@vitejs/plugin-react": "^1.2.0",
     "cac": "^6.7.12",
     "chalk": "^5.0.0",
     "htmlparser2": "^7.2.0",
     "magic-string": "^0.26.1",
-    "vite": "^2.9.5"
+    "vite": "^2.9.5",
+    "react-router-dom": "^6.2.2"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
   },
   "packageManager": "pnpm@6.32.2",
   "engines": {

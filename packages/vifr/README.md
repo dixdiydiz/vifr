@@ -1,1 +1,1 @@
-vifr ..
+vifr readme

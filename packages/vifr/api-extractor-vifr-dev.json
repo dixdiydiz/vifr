@@ -1,0 +1,11 @@
+{
+  "extends": "./api-extractor-base.json",
+
+  "mainEntryPointFilePath": "<projectFolder>/temp/dev/index.d.ts",
+
+  "dtsRollup": {
+    "enabled": true,
+    "untrimmedFilePath": "",
+    "publicTrimmedFilePath": "<projectFolder>/dist/dev/index.d.ts"
+  }
+}

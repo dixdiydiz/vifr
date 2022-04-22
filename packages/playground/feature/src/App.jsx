@@ -1,6 +1,6 @@
 // import { Suspense } from 'react'
 import { Link } from 'react-router-dom'
-import { Routes } from 'vifr/react'
+import { Routes } from '@vifr/react'
 import { useState } from 'react'
 import Spinner from './components/Spinner'
 

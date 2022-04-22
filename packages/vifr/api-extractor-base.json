@@ -5,13 +5,6 @@
 
   "mainEntryPointFilePath": "<projectFolder>/temp/index.d.ts",
 
-
-  "dtsRollup": {
-    "enabled": true,
-    "untrimmedFilePath": "",
-    "publicTrimmedFilePath": "<projectFolder>/dist/index.d.ts"
-  },
-
   "apiReport": {
     "enabled": false
   },

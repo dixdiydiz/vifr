@@ -1,15 +1,16 @@
 import type { ServerResponse } from 'http'
 import * as React from 'react'
 import { renderToPipeableStream } from 'react-dom/server'
+import { hydrateRoot } from 'react-dom/client'
 import { StaticRouter } from 'react-router-dom/server'
 import { BrowserRouter } from 'react-router-dom'
 import { isFunction } from './utils'
-import { CLIENT_ENTRY } from './constant'
+import { CLIENT_ENTRY } from '../constant'
 
 /**
  * copy from https://github.com/facebook/react/blob/9ae80d6a2bf8f48f20e3d62b9672f21c1ff77bd8/packages/react-dom/src/server/ReactDOMFizzServerNode.js#L35
  */
-interface RenderToPipeableStreamOptions {
+export interface RenderToPipeableStreamOptions {
   identifierPrefix?: string
   namespaceURI?: string
   nonce?: string
@@ -23,7 +24,7 @@ interface RenderToPipeableStreamOptions {
   onError?: (error: any) => void
 }
 
-interface ServerRenderOptions extends RenderToPipeableStreamOptions {
+export interface ServerRenderOptions extends RenderToPipeableStreamOptions {
   /**
    * route url
    */
@@ -52,7 +53,7 @@ export function serverRender(
     ...rest
   } = options
   const { pipe, abort } = renderToPipeableStream(
-    reactNode,
+    <VifrServer location={url}>{reactNode}</VifrServer>,
     Object.assign(
       {},
       {
@@ -84,6 +85,10 @@ export function serverRender(
   // Abandon and switch to client rendering if enough time passes.
   // Try lowering this to see the client recover.
   setTimeout(abort, abortTimeout)
+}
+
+export function clientRender(reactNode: React.ReactNode) {
+  hydrateRoot(document, <VifrBrowser>{reactNode}</VifrBrowser>)
 }
 
 interface VifrEntryContextType {

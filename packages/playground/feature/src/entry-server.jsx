@@ -1,5 +1,4 @@
-import { renderToPipeableStream } from 'react-dom/server'
-import { VifrServer } from 'vifr/react'
+import { serverRender } from 'vifr/react'
 import ErrorBoundary from './ErrorBoundary'
 import Html from './Html'
 import { DataProvider } from './pages/selectivehydration/fakeData'
@@ -30,39 +29,16 @@ function createServerData() {
 
 const data = createServerData()
 
-export default function (url, res) {
-  const { pipe, abort } = renderToPipeableStream(
-    <VifrServer location={url}>
-      <ErrorBoundary>
-        <DataProvider data={data}>
-          <Html />
-        </DataProvider>
-      </ErrorBoundary>
-    </VifrServer>,
+export default function (url, response) {
+  serverRender(
+    <ErrorBoundary>
+      <DataProvider data={data}>
+        <Html />
+      </DataProvider>
+    </ErrorBoundary>,
     {
-      bootstrapScriptContent:
-        'window.BOOT ? BOOT() : (window.LOADED = true);console.log(1)',
-      bootstrapModules: ['/src/entry-client.jsx'],
-      // onShellReady onAllReady
-      onShellReady() {
-        res.statusCode = 200
-        res.setHeader('Content-type', 'text/html')
-        pipe(res)
-      },
-      onAllReady() {
-        res.write(`
-          <script>window.__VIFR_USEDATA__ = {':R1q:': () => {console.log('eeee')}}</script>`)
-      },
-      onError(x) {
-        res.statusCode = 500
-        res.send(
-          '<!doctype html><p>Loading...</p><script type="module">console.log(`error`)</script>'
-        )
-        console.error(x)
-      }
+      url,
+      response
     }
   )
-  // Abandon and switch to client rendering if enough time passes.
-  // Try lowering this to see the client recover.
-  // setTimeout(abort, 10000)
 }

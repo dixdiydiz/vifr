@@ -98,7 +98,7 @@ function loadPlugin(path: string): Promise<any> {
   return import(path).then((module) => module.default || module)
 }
 
-export function pluginCollection({
+export default function pluginCollection({
   headCache
 }: {
   headCache: Record<string, any>

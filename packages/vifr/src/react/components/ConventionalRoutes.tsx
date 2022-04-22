@@ -3,7 +3,7 @@ import resolvedVifrConfig from '@vifr-virtual-resolved-config'
 import type { RouteObject } from 'react-router-dom'
 import * as React from 'react'
 import { useRoutes } from 'react-router-dom'
-import { ROUTES_ROOT } from '../constant'
+import { ROUTES_ROOT } from '../../constant'
 
 interface PagesType {
   [index: string]: () => Promise<{
