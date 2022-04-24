@@ -75,7 +75,7 @@ function transformRoutesImportMetaUrlPlugin(): Plugin {
     name: 'vifr:transform-vifr-react-components',
     enforce: 'pre',
     async transform(code, id) {
-      if (id.includes('vifr/dist/react/vifr-react.js')) {
+      if (id.includes('vifr/dist/react/index.js')) {
         const s = new MagicString(code)
         const {
           routes: { suffix }

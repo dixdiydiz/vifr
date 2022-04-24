@@ -37,14 +37,16 @@ const RouteElement = React.memo(() => {
   return element
 })
 
-export const Routes = ({ fallback = null }: ConventionalRoutesProps): any => {
+export const PageRoutes = ({
+  fallback = null
+}: ConventionalRoutesProps): any => {
   return (
     <React.Suspense fallback={fallback}>
       <RouteElement />
     </React.Suspense>
   )
 }
-Routes.displayName = 'VifrConventionalRoutes'
+PageRoutes.displayName = 'VifrConventionalRoutes'
 
 interface Options {
   suffix?: string

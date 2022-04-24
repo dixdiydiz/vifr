@@ -32,14 +32,14 @@ export async function ssrTransformIndexHtml(url: string, template: string) {
 export async function renderServerEntry(
   url: string,
   res: http.ServerResponse
-): Promise<http.ServerResponse> {
+): Promise<void> {
   await transformIndexHtml(url)
   const { default: render } = await viteServer!.ssrLoadModule(
     path.resolve(process.cwd(), 'src/entry-server.jsx')
   )
   invariant(render, 'entry-server should export a default function.')
   render(url, res)
-  return res
+  // return res
 }
 
 export function ssrFixStacktrace(e: Error): void {

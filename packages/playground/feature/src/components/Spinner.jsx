@@ -1,4 +1,4 @@
-// import { useResolvedPath } from 'react-router-dom'
+// import { useResolvedPath } from 'vifr/react'
 export default function Spinner() {
   return (
     <>

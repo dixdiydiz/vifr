@@ -29,6 +29,7 @@ const shareConfig = {
   external(isProduction) {
     return [
       ...Object.keys(pkg.dependencies),
+      ...Object.keys(pkg.peerDependencies),
       ...(isProduction ? [] : Object.keys(pkg.devDependencies)),
       /@vifr/
     ]

@@ -1,6 +1,6 @@
 // import { Suspense } from 'react'
 import { Link } from 'react-router-dom'
-import { Routes } from '@vifr/react'
+import { PageRoutes } from 'vifr/react'
 import { useState } from 'react'
 import Spinner from './components/Spinner'
 
@@ -33,7 +33,7 @@ export default function App() {
       </ul>
       <p>You clicked {count} times</p>
       <button onClick={() => setCount((c) => c + 1)}>click me</button>
-      <Routes fallback={<Spinner />} />
+      <PageRoutes fallback={<Spinner />} />
     </>
   )
 }

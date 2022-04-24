@@ -52,17 +52,19 @@
     "picocolors": "^1.0.0"
   },
   "dependencies": {
+    "@babel/core": "^7.17.9",
+    "@babel/plugin-transform-react-jsx": "^7.17.0",
     "@vitejs/plugin-react": "^1.2.0",
     "cac": "^6.7.12",
     "chalk": "^5.0.0",
     "htmlparser2": "^7.2.0",
     "magic-string": "^0.26.1",
-    "vite": "^2.9.5",
-    "react-router-dom": "^6.2.2"
+    "vite": "^2.9.5"
   },
   "peerDependencies": {
     "react": ">=18",
-    "react-dom": ">=18"
+    "react-dom": ">=18",
+    "react-router-dom": ">=6.3.0"
   },
   "packageManager": "pnpm@6.32.2",
   "engines": {

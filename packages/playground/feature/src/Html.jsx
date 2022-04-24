@@ -1,4 +1,4 @@
-import { Head } from '@vifr/react'
+import { Head } from 'vifr/react'
 import App from './App'
 
 export default function Html() {
