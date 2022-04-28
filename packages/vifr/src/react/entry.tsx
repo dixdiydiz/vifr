@@ -98,32 +98,20 @@ interface VifrEntryContextType {
 const VifrEntryContext = React.createContext<VifrEntryContextType>(null!)
 VifrEntryContext.displayName = 'VifrEntryContext'
 
-function VifrEntry({
-  isStatic,
-  location,
-  children
-}: {
-  isStatic: boolean
-  location?: string
-  children: React.ReactNode
-}): JSX.Element {
+function VifrEntry({ children }: { children: React.ReactNode }): JSX.Element {
   const entryCtx = React.useMemo(() => {
     return {}
   }, [])
   return (
     <>
       <VifrEntryContext.Provider value={entryCtx}>
-        {isStatic ? (
-          <StaticRouter location={location!}>{children}</StaticRouter>
-        ) : (
-          <BrowserRouter>{children}</BrowserRouter>
-        )}
+        {children}
       </VifrEntryContext.Provider>
     </>
   )
 }
 
-export function VifrServer({
+function VifrServer({
   location,
   children
 }: {
@@ -132,21 +120,19 @@ export function VifrServer({
 }): JSX.Element {
   return (
     <>
-      <VifrEntry isStatic location={location}>
-        {children}
+      <VifrEntry>
+        <StaticRouter location={location}>{children}</StaticRouter>
       </VifrEntry>
     </>
   )
 }
 
-export function VifrBrowser({
-  children
-}: {
-  children: React.ReactNode
-}): JSX.Element {
+function VifrBrowser({ children }: { children: React.ReactNode }): JSX.Element {
   return (
     <>
-      <VifrEntry isStatic={false}>{children}</VifrEntry>
+      <VifrEntry>
+        <BrowserRouter>{children}</BrowserRouter>
+      </VifrEntry>
     </>
   )
 }
