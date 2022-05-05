@@ -39,7 +39,7 @@ const RouteElement = React.memo(() => {
 
 export const PageRoutes = ({
   fallback = null
-}: ConventionalRoutesProps): any => {
+}: ConventionalRoutesProps): JSX.Element => {
   return (
     <React.Suspense fallback={fallback}>
       <RouteElement />

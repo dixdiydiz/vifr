@@ -1,6 +1,6 @@
 import { useData } from './fakeData'
 
-export default function Comments() {
+export default function Comments({ count }) {
   const comments = useData()
   return (
     <>
@@ -10,6 +10,7 @@ export default function Comments() {
           {comment}
         </p>
       ))}
+      <p>prop count: {count}</p>
     </>
   )
 }

@@ -87,8 +87,9 @@ export function serverRender(
   setTimeout(abort, abortTimeout)
 }
 
-export function clientRender(reactNode: React.ReactNode) {
-  hydrateRoot(document, <VifrBrowser>{reactNode}</VifrBrowser>)
+// todo: options use HydrationOptions
+export function clientRender(reactNode: React.ReactNode, options?: any) {
+  hydrateRoot(document, <VifrBrowser>{reactNode}</VifrBrowser>, options)
 }
 
 interface VifrEntryContextType {

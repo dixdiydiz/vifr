@@ -2,24 +2,37 @@ import { useState, Suspense, lazy, useId } from 'react'
 import * as React from 'react'
 const Comments = lazy(() => import('./Comments'))
 
-const LazyComments = React.memo(
-  () => {
+const DynamicComment = React.memo(
+  ({ children, count }) => {
     return (
       <>
-        <Suspense fallback={<div>laoding1...</div>}>
-          <Comments />
-        </Suspense>
+        <Suspense fallback={<div>loading22</div>}>{children}</Suspense>
       </>
     )
   },
-  (prevProps, nextProps) => {
+  () => {
     return true
   }
 )
 
+function DynamicComment2({ count, children }) {
+  const [count2, setCount2] = useState(0)
+  const cloneElement = React.cloneElement(children)
+  return (
+    <>
+      <p>You clicked {count2} times in DynamicComment2</p>
+      <button onClick={() => setCount2((c) => c + 1)}>click me</button>
+      {count >= 6 ? (
+        <Suspense fallback={<div>loading22</div>}>{children}</Suspense>
+      ) : (
+        <DynamicComment count={count}>{cloneElement}</DynamicComment>
+      )}
+    </>
+  )
+}
+
 export default function () {
   const [count, setCount] = useState(0)
-  const [isPending, startTransition] = useTransition()
   const id1 = useId()
   const id2 = useId()
   const id3 = useId()
@@ -33,9 +46,9 @@ export default function () {
       </p>
       <p>You clicked {count} times</p>
       <button onClick={() => setCount((c) => c + 1)}>click me</button>
-      <LazyComments>
-        <Comments />
-      </LazyComments>
+      <DynamicComment2 count={count}>
+        <Comments count={count} />
+      </DynamicComment2>
     </>
   )
 }
