@@ -112,6 +112,28 @@ function VifrEntry({ children }: { children: React.ReactNode }): JSX.Element {
   )
 }
 
+export const vifrServerSideContext = React.createContext(null)
+
+function createServerSideData(response: ServerResponse) {
+  return async (fn: (...args: unknown[]) => unknown) => {
+    const promise = new Promise(async (resolve) => {
+      const data = await fn()
+    })
+    return {
+      read() {
+        const promise = new Promise((resolve) => {
+          setTimeout(() => {
+            done = true
+            promise = null
+            resolve()
+          }, 5000)
+        })
+        throw promise
+      }
+    }
+  }
+}
+
 function VifrServer({
   location,
   children
@@ -121,9 +143,11 @@ function VifrServer({
 }): JSX.Element {
   return (
     <>
-      <VifrEntry>
-        <StaticRouter location={location}>{children}</StaticRouter>
-      </VifrEntry>
+      <VifrEntryContext.Provider value={{}}>
+        <VifrEntry>
+          <StaticRouter location={location}>{children}</StaticRouter>
+        </VifrEntry>
+      </VifrEntryContext.Provider>
     </>
   )
 }
