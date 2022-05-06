@@ -39,6 +39,32 @@ export interface ServerRenderOptions extends RenderToPipeableStreamOptions {
   abortTimeout?: number
 }
 
+interface ServerSideContextValue {
+  getCovertData: (fn: (...args: unknown[]) => unknown, id: string) => void
+}
+
+export const ServerSideContext =
+  React.createContext<ServerSideContextValue | null>(null)
+
+function serverSideDataFactory(response: ServerResponse) {
+  return (fn: (...args: unknown[]) => unknown, id: string) => {
+    let resolve: (value: unknown) => void
+    const promise = new Promise((r) => {
+      resolve = r
+    })
+    Promise.resolve().then(async () => {
+      const data = await fn()
+      response.write(
+        `<script type="module">window.__VIFR_COVERT_DATA__.${id}=${JSON.stringify(
+          data
+        )}</script>`
+      )
+      resolve!(true)
+    })
+    throw promise
+  }
+}
+
 export function serverRender(
   reactNode: React.ReactNode,
   options: ServerRenderOptions
@@ -47,16 +73,24 @@ export function serverRender(
     url = '/',
     response,
     abortTimeout = 10000,
+    bootstrapScriptContent: customBootstrapScriptContent,
     bootstrapModules: customBootstrapModules,
     onShellReady: customOnShellReady,
     onError: customOnError,
     ...rest
   } = options
+  const initScriptContent = `winddow.__VIFR_COVERT_DATA__={}`
+  const getCovertData = serverSideDataFactory(response)
   const { pipe, abort } = renderToPipeableStream(
-    <VifrServer location={url}>{reactNode}</VifrServer>,
+    <ServerSideContext.Provider value={{ getCovertData }}>
+      <VifrServer location={url}>{reactNode}</VifrServer>
+    </ServerSideContext.Provider>,
     Object.assign(
       {},
       {
+        bootstrapScriptContent: customBootstrapScriptContent
+          ? `${initScriptContent};${customBootstrapScriptContent}`
+          : initScriptContent,
         bootstrapModules: Array.isArray(customBootstrapModules)
           ? [CLIENT_ENTRY, ...customBootstrapModules]
           : [CLIENT_ENTRY],
@@ -112,28 +146,6 @@ function VifrEntry({ children }: { children: React.ReactNode }): JSX.Element {
   )
 }
 
-export const vifrServerSideContext = React.createContext(null)
-
-function createServerSideData(response: ServerResponse) {
-  return async (fn: (...args: unknown[]) => unknown) => {
-    const promise = new Promise(async (resolve) => {
-      const data = await fn()
-    })
-    return {
-      read() {
-        const promise = new Promise((resolve) => {
-          setTimeout(() => {
-            done = true
-            promise = null
-            resolve()
-          }, 5000)
-        })
-        throw promise
-      }
-    }
-  }
-}
-
 function VifrServer({
   location,
   children
@@ -143,11 +155,9 @@ function VifrServer({
 }): JSX.Element {
   return (
     <>
-      <VifrEntryContext.Provider value={{}}>
-        <VifrEntry>
-          <StaticRouter location={location}>{children}</StaticRouter>
-        </VifrEntry>
-      </VifrEntryContext.Provider>
+      <VifrEntry>
+        <StaticRouter location={location}>{children}</StaticRouter>
+      </VifrEntry>
     </>
   )
 }
