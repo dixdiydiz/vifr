@@ -1,11 +1,19 @@
 import type { ServerResponse } from 'http'
-import * as React from 'react'
+import { createContext, useMemo } from 'react'
+import type { ReactNode } from 'react'
 import { renderToPipeableStream } from 'react-dom/server'
 import { hydrateRoot } from 'react-dom/client'
 import { StaticRouter } from 'react-router-dom/server'
 import { BrowserRouter } from 'react-router-dom'
 import { isFunction } from './utils'
 import { CLIENT_ENTRY } from '../constant'
+import { useCallback } from 'react'
+
+declare global {
+  interface Window {
+    __VIFR_COVERT_DATA__: Record<string, any>
+  }
+}
 
 /**
  * copy from https://github.com/facebook/react/blob/9ae80d6a2bf8f48f20e3d62b9672f21c1ff77bd8/packages/react-dom/src/server/ReactDOMFizzServerNode.js#L35
@@ -39,58 +47,87 @@ export interface ServerRenderOptions extends RenderToPipeableStreamOptions {
   abortTimeout?: number
 }
 
-interface ServerSideContextValue {
-  getCovertData: (fn: (...args: unknown[]) => unknown, id: string) => void
+export const ServerSideContext = createContext<ServerSideContextValue | null>(
+  null
+)
+
+interface CovertDataScope {
+  promise: Promise<unknown> | null
+  resolve: ((value: unknown) => void) | null
+}
+interface ThrowCovertData {
+  (id: string, fn: (...args: unknown[]) => unknown): void
 }
 
-export const ServerSideContext =
-  React.createContext<ServerSideContextValue | null>(null)
+interface ServerSideContextValue {
+  throwCovertData: ThrowCovertData
+}
 
-function serverSideDataFactory(response: ServerResponse) {
-  return (fn: (...args: unknown[]) => unknown, id: string) => {
-    let resolve: (value: unknown) => void
-    const promise = new Promise((r) => {
-      resolve = r
+function throwServerSideData(response: ServerResponse): ThrowCovertData {
+  const scopeMap: Record<string, CovertDataScope> = Object.create(null)
+  return (id, fn) => {
+    if (!scopeMap[id]) {
+      scopeMap[id] = {
+        promise: null,
+        resolve: null
+      }
+    }
+    const scope = scopeMap[id]
+    if (scope.promise) {
+      console.log('throw promise')
+      throw scope.promise
+    }
+    scope.promise = new Promise((r) => {
+      scope.resolve = r
     })
-    Promise.resolve().then(async () => {
+    console.log('scope.promise ', scope.promise)
+    ;(async () => {
+      console.log('进来这里')
       const data = await fn()
+      console.log('data ', data)
       response.write(
         `<script type="module">window.__VIFR_COVERT_DATA__.${id}=${JSON.stringify(
           data
         )}</script>`
       )
-      resolve!(true)
-    })
-    throw promise
+      scope.resolve!(null)
+    })()
+    // Promise.resolve().then(async () => {
+    //   const data = await fn()
+    //   console.log('throw 执行了', data)
+    //   // response.write(
+    //   //   `<script type="module">window.__VIFR_COVERT_DATA__.${id}=${JSON.stringify(
+    //   //     data
+    //   //   )}</script>`
+    //   // )
+    //   resolve!(true)
+    // })
+    throw scope.promise
   }
 }
 
 export function serverRender(
-  reactNode: React.ReactNode,
+  reactNode: ReactNode,
   options: ServerRenderOptions
 ) {
   const {
     url = '/',
     response,
     abortTimeout = 10000,
-    bootstrapScriptContent: customBootstrapScriptContent,
     bootstrapModules: customBootstrapModules,
     onShellReady: customOnShellReady,
     onError: customOnError,
     ...rest
   } = options
-  const initScriptContent = `winddow.__VIFR_COVERT_DATA__={}`
-  const getCovertData = serverSideDataFactory(response)
+  const throwCovertData = throwServerSideData(response)
+  console.log('次数')
   const { pipe, abort } = renderToPipeableStream(
-    <ServerSideContext.Provider value={{ getCovertData }}>
+    <ServerSideContext.Provider value={{ throwCovertData }}>
       <VifrServer location={url}>{reactNode}</VifrServer>
     </ServerSideContext.Provider>,
     Object.assign(
       {},
       {
-        bootstrapScriptContent: customBootstrapScriptContent
-          ? `${initScriptContent};${customBootstrapScriptContent}`
-          : initScriptContent,
         bootstrapModules: Array.isArray(customBootstrapModules)
           ? [CLIENT_ENTRY, ...customBootstrapModules]
           : [CLIENT_ENTRY],
@@ -122,7 +159,7 @@ export function serverRender(
 }
 
 // todo: options use HydrationOptions
-export function clientRender(reactNode: React.ReactNode, options?: any) {
+export function clientRender(reactNode: ReactNode, options?: any) {
   hydrateRoot(document, <VifrBrowser>{reactNode}</VifrBrowser>, options)
 }
 
@@ -130,11 +167,11 @@ interface VifrEntryContextType {
   [key: string]: any
 }
 
-const VifrEntryContext = React.createContext<VifrEntryContextType>(null!)
+const VifrEntryContext = createContext<VifrEntryContextType>(null!)
 VifrEntryContext.displayName = 'VifrEntryContext'
 
-function VifrEntry({ children }: { children: React.ReactNode }): JSX.Element {
-  const entryCtx = React.useMemo(() => {
+function VifrEntry({ children }: { children: ReactNode }): JSX.Element {
+  const entryCtx = useMemo(() => {
     return {}
   }, [])
   return (
@@ -151,7 +188,7 @@ function VifrServer({
   children
 }: {
   location: string
-  children: React.ReactNode
+  children: ReactNode
 }): JSX.Element {
   return (
     <>
@@ -162,7 +199,12 @@ function VifrServer({
   )
 }
 
-function VifrBrowser({ children }: { children: React.ReactNode }): JSX.Element {
+function VifrBrowser({ children }: { children: ReactNode }): JSX.Element {
+  const initialGlobalData = useCallback(() => {
+    if (window.__VIFR_COVERT_DATA__) return
+    window.__VIFR_COVERT_DATA__ = {}
+  }, [])
+  initialGlobalData()
   return (
     <>
       <VifrEntry>

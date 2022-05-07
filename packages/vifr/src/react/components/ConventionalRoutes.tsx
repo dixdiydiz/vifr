@@ -1,13 +1,14 @@
 // @ts-ignore
 import resolvedVifrConfig from '@vifr-virtual-resolved-config'
+import { lazy, memo, Suspense } from 'react'
+import type { ComponentType, ReactNode, SuspenseProps } from 'react'
 import type { RouteObject } from 'react-router-dom'
-import * as React from 'react'
 import { useRoutes } from 'react-router-dom'
 import { ROUTES_ROOT } from '../../constant'
 
 interface PagesType {
   [index: string]: () => Promise<{
-    default: React.ComponentType<React.ReactNode>
+    default: ComponentType<ReactNode>
   }>
 }
 
@@ -18,21 +19,21 @@ const {
 } = resolvedVifrConfig
 
 function withConventionalRoutes(
-  dynamicImport: () => Promise<{ default: React.ComponentType<any> }>
-): React.ReactNode {
-  const DynamicComponent = React.lazy(dynamicImport)
+  dynamicImport: () => Promise<{ default: ComponentType<any> }>
+): ReactNode {
+  const DynamicComponent = lazy(dynamicImport)
   return <DynamicComponent />
 }
 
 export interface ConventionalRoutesProps {
-  fallback?: React.SuspenseProps['fallback']
+  fallback?: SuspenseProps['fallback']
 }
 const routes = createRoutes(pages, ROUTES_ROOT, {
   suffix,
   caseSensitive
 })
 
-const RouteElement = React.memo(() => {
+const RouteElement = memo(() => {
   const element = useRoutes(routes)
   return element
 })
@@ -41,9 +42,9 @@ export const PageRoutes = ({
   fallback = null
 }: ConventionalRoutesProps): JSX.Element => {
   return (
-    <React.Suspense fallback={fallback}>
+    <Suspense fallback={fallback}>
       <RouteElement />
-    </React.Suspense>
+    </Suspense>
   )
 }
 PageRoutes.displayName = 'VifrConventionalRoutes'

@@ -6,7 +6,7 @@
     "vifr": "./dist/cli.js"
   },
   "scripts": {
-    "dev": "rimraf dist && rollup -c -w",
+    "dev": "rimraf dist && rollup -c -m -w",
     "build": "rimraf dist && run-s lint build-bundle build-temp-types roll-types",
     "build-bundle": "rollup -c",
     "build-temp-types": "tsc --emitDeclarationOnly --declarationDir temp",
