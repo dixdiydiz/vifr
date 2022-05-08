@@ -1,4 +1,4 @@
-import { useContext, useId, useMemo, Suspense } from 'react'
+import { useContext, useId, Suspense, useRef, useEffect } from 'react'
 import type { ReactNode, SuspenseProps } from 'react'
 import { ServerSideContext } from '../entry'
 
@@ -7,22 +7,20 @@ export interface CovertSuspenseProps {
   fallback?: SuspenseProps['fallback']
 }
 
-export const coverDataMap = new WeakMap()
-
 export function useCovertData(fn: (...args: unknown[]) => unknown) {
   const ctx = useContext(ServerSideContext)
   const id = useId()
+  const fieldId = `__VIFR_COVERT_ID_${id.replace(/:/g, '$')}__`
   if (ctx !== null) {
-    ctx.throwCovertData(id, fn)
+    return ctx.throwCovertData(fieldId, fn)
   }
-  console.log('useCovertData', id)
-  const data = useMemo(() => {
-    const vifrCovertData = window.__VIFR_COVERT_DATA__
-    const result = vifrCovertData[id]
-    Reflect.deleteProperty(vifrCovertData, id)
-    return result
+  // todo: Object.freeze 限制用户操作__VIFR_COVERT_DATA__
+  const vifrCovertData = window?.__VIFR_COVERT_DATA__ || {}
+  const coverDataRef = useRef(vifrCovertData[fieldId])
+  useEffect(() => {
+    Reflect.deleteProperty(vifrCovertData, fieldId)
   }, [])
-  return data
+  return coverDataRef.current
 }
 
 export function CovertSuspense({

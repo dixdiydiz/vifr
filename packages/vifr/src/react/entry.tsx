@@ -53,7 +53,9 @@ export const ServerSideContext = createContext<ServerSideContextValue | null>(
 
 interface CovertDataScope {
   promise: Promise<unknown> | null
-  resolve: ((value: unknown) => void) | null
+  done: boolean
+  covertCallback: Function
+  covertCallbackResult: any
 }
 interface ThrowCovertData {
   (id: string, fn: (...args: unknown[]) => unknown): void
@@ -69,39 +71,32 @@ function throwServerSideData(response: ServerResponse): ThrowCovertData {
     if (!scopeMap[id]) {
       scopeMap[id] = {
         promise: null,
-        resolve: null
+        done: false,
+        covertCallback: () => void 0,
+        covertCallbackResult: null
       }
     }
     const scope = scopeMap[id]
+    if (scope.done) {
+      const result = scope.covertCallbackResult
+      Reflect.deleteProperty(scopeMap, id)
+      return result
+    }
     if (scope.promise) {
-      console.log('throw promise')
       throw scope.promise
     }
-    scope.promise = new Promise((r) => {
-      scope.resolve = r
+    scope.promise = new Promise((resolve) => {
+      ;(async () => {
+        scope.covertCallbackResult = await fn()
+        scope.done = true
+        response.write(
+          `<script type="module">window.__VIFR_COVERT_DATA__.${id}=${JSON.stringify(
+            scope.covertCallbackResult
+          )}</script>`
+        )
+        resolve(true)
+      })()
     })
-    console.log('scope.promise ', scope.promise)
-    ;(async () => {
-      console.log('进来这里')
-      const data = await fn()
-      console.log('data ', data)
-      response.write(
-        `<script type="module">window.__VIFR_COVERT_DATA__.${id}=${JSON.stringify(
-          data
-        )}</script>`
-      )
-      scope.resolve!(null)
-    })()
-    // Promise.resolve().then(async () => {
-    //   const data = await fn()
-    //   console.log('throw 执行了', data)
-    //   // response.write(
-    //   //   `<script type="module">window.__VIFR_COVERT_DATA__.${id}=${JSON.stringify(
-    //   //     data
-    //   //   )}</script>`
-    //   // )
-    //   resolve!(true)
-    // })
     throw scope.promise
   }
 }
@@ -120,7 +115,6 @@ export function serverRender(
     ...rest
   } = options
   const throwCovertData = throwServerSideData(response)
-  console.log('次数')
   const { pipe, abort } = renderToPipeableStream(
     <ServerSideContext.Provider value={{ throwCovertData }}>
       <VifrServer location={url}>{reactNode}</VifrServer>

@@ -8,10 +8,14 @@ export default function Comments({ count }) {
       'How does this even work?',
       'I like marshmallows'
     ]
-    setTimeout(() => {
-      return fakeData
-    }, 3000)
+    const result = await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(fakeData)
+      }, 3000)
+    })
+    return result
   })
+  console.log('执行到这里')
   return (
     <>
       <h1>Comments</h1>

@@ -10,8 +10,9 @@ const DynamicComment = React.memo(
       </>
     )
   },
-  () => {
-    return false
+  (prev, curr) => {
+    console.log(prev, curr)
+    return true
   }
 )
 
