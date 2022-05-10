@@ -1,5 +1,6 @@
 import { useState, Suspense, lazy, useId, useMemo } from 'react'
 import * as React from 'react'
+import { CovertSuspense } from 'vifr/react'
 const Comments = lazy(() => import('./Comments'))
 
 const DynamicComment = React.memo(
@@ -60,9 +61,9 @@ export default function () {
       </p>
       <p>You clicked {count} times</p>
       <button onClick={() => setCount((c) => c + 1)}>click me</button>
-      <DynamicComment count={count}>
+      <CovertSuspense count={count} fallback={<div>loading cover</div>}>
         <Comments count={count} />
-      </DynamicComment>
+      </CovertSuspense>
     </>
   )
 }
