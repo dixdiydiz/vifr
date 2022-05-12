@@ -2,12 +2,12 @@ import {
   useContext,
   useId,
   Suspense,
+  useState,
   useRef,
   useEffect,
   useMemo,
   memo,
-  useCallback,
-  cloneElement
+  useLayoutEffect
 } from 'react'
 import type { ReactElement, SuspenseProps } from 'react'
 import { ServerSideContext } from '../entry'
@@ -33,52 +33,53 @@ export function useCovertData(fn: (...args: unknown[]) => unknown) {
   return coverDataRef.current
 }
 
-// function Cover(): JSX.Element {
-//   const ctx = useContext(ServerSideContext)
-//   if (ctx !== null) {
-//
-//   }
-// }
-
 export function CovertSuspense({
   children,
   fallback
 }: CovertSuspenseProps): JSX.Element {
-  const serverChildren = useMemo(() => {
-    return cloneElement(children)
-  }, [])
-  const fallbackMemo = useMemo(() => fallback, [])
-  const Bar = useCallback(() => {
-    const cloneChild = cloneElement(children)
-    const ctx = useContext(ServerSideContext)
-    if (ctx !== null) {
-      console.log('服务端渲染')
-    } else {
-      console.log('客户端渲染')
+  const updateRef = useRef(false)
+  const [update, setUpdate] = useState(false)
+  console.log('CovertSuspense 渲染', update, updateRef.current)
+  const propsAreEqual = () => {
+    console.log('判断', update, updateRef.current)
+    if (updateRef.current) {
+      console.log('判断1', update, updateRef.current)
+      return false
     }
-    console.log('一起渲染')
-    return <>{children}</>
+    console.log('判断2', update, updateRef.current)
+    return true
+  }
+  const Bar = useMemo(() => {
+    return memo(({ children }: Pick<CovertSuspenseProps, 'children'>) => {
+      const ctx = useContext(ServerSideContext)
+      useLayoutEffect(() => {
+        if (ctx === null) {
+          updateRef.current = true
+          setUpdate(true)
+        }
+      }, [])
+      if (ctx !== null) {
+        console.log('服务端渲染')
+      } else {
+        console.log('客户端渲染', children)
+      }
+      return <>{children}</>
+    }, propsAreEqual)
   }, [])
   const Foo = useMemo(() => {
-    return memo(
-      () => {
-        return (
-          <>
-            <Suspense fallback={fallbackMemo}>
-              <Bar />
-            </Suspense>
-          </>
-        )
-      },
-      () => {
-        return false
-      }
-    )
+    return memo(({ children }: Pick<CovertSuspenseProps, 'children'>) => {
+      return (
+        <>
+          <Suspense fallback={fallback}>
+            <Bar>{children}</Bar>
+          </Suspense>
+        </>
+      )
+    }, propsAreEqual)
   }, [])
   return (
     <>
-      {/*<Suspense fallback={fallbackMemo}>{children}</Suspense>*/}
-      <Foo />
+      <Foo>{children}</Foo>
     </>
   )
 }

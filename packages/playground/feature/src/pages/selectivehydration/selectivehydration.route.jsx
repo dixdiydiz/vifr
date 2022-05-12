@@ -7,13 +7,13 @@ const DynamicComment = React.memo(
   ({ children, count }) => {
     return (
       <>
-        <Suspense fallback={<div>loading22</div>}>{children}</Suspense>
+        <Suspense fallback={<div>loading2...</div>}>{children}</Suspense>
       </>
     )
   },
   (prev, curr) => {
     console.log(prev, curr)
-    return true
+    return false
   }
 )
 
@@ -48,6 +48,7 @@ function DynamicComment3({ children }) {
 
 export default function () {
   const [count, setCount] = useState(0)
+  const [count2, setCount2] = useState(0)
   const id1 = useId()
   const id2 = useId()
   const id3 = useId()
@@ -59,9 +60,13 @@ export default function () {
       <p>
         {id2}/{id3}
       </p>
+      <p>You clicked {count2} times</p>
+      <button onClick={() => setCount2((c) => c + 1)}>自身渲染</button>
       <p>You clicked {count} times</p>
-      <button onClick={() => setCount((c) => c + 1)}>click me</button>
-      <CovertSuspense count={count} fallback={<div>loading cover</div>}>
+      <button onClick={() => setCount((c) => c + 1)}>
+        点击触发comment渲染
+      </button>
+      <CovertSuspense fallback={<div>loading22</div>}>
         <Comments count={count} />
       </CovertSuspense>
     </>

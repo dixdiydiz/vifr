@@ -2,6 +2,7 @@ import { useData } from './fakeData'
 import { useCovertData } from 'vifr/react'
 
 export default function Comments({ count }) {
+  console.log('执行到这里comments')
   const comments = useCovertData(async () => {
     const fakeData = [
       "Wait, it doesn't wait for React to load?",
