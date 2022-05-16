@@ -38,18 +38,14 @@ export function CovertSuspense({
   fallback
 }: CovertSuspenseProps): JSX.Element {
   const updateRef = useRef(false)
-  const [update, setUpdate] = useState(false)
-  console.log('CovertSuspense 渲染', update, updateRef.current)
+  const [_, setUpdate] = useState(false)
   const propsAreEqual = () => {
-    console.log('判断', update, updateRef.current)
     if (updateRef.current) {
-      console.log('判断1', update, updateRef.current)
       return false
     }
-    console.log('判断2', update, updateRef.current)
     return true
   }
-  const Bar = useMemo(() => {
+  const ChildrenWrap = useMemo(() => {
     return memo(({ children }: Pick<CovertSuspenseProps, 'children'>) => {
       const ctx = useContext(ServerSideContext)
       useLayoutEffect(() => {
@@ -58,20 +54,24 @@ export function CovertSuspense({
           setUpdate(true)
         }
       }, [])
-      if (ctx !== null) {
-        console.log('服务端渲染')
-      } else {
-        console.log('客户端渲染', children)
-      }
-      return <>{children}</>
+      console.log('更新', updateRef.current)
+      return (
+        <>
+          {updateRef.current ? (
+            children
+          ) : (
+            <div style={{ display: 'none' }}>{children}</div>
+          )}
+        </>
+      )
     }, propsAreEqual)
   }, [])
-  const Foo = useMemo(() => {
+  const SuspenseWrap = useMemo(() => {
     return memo(({ children }: Pick<CovertSuspenseProps, 'children'>) => {
       return (
         <>
           <Suspense fallback={fallback}>
-            <Bar>{children}</Bar>
+            <ChildrenWrap>{children}</ChildrenWrap>
           </Suspense>
         </>
       )
@@ -79,7 +79,7 @@ export function CovertSuspense({
   }, [])
   return (
     <>
-      <Foo>{children}</Foo>
+      <SuspenseWrap>{children}</SuspenseWrap>
     </>
   )
 }
