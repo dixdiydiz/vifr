@@ -23,7 +23,11 @@ export default function () {
       <button onClick={() => setCount((c) => c + 1)}>
         点击触发comment渲染
       </button>
-      <CovertSuspense fallback={<div>loading22</div>}>
+      <CovertSuspense
+        fallback={<div>loading22</div>}
+        style={{ display: 'block' }}
+        className="covert"
+      >
         <Comments count={count} />
       </CovertSuspense>
     </>
