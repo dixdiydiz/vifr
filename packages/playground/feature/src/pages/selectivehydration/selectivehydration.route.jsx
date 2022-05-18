@@ -1,6 +1,6 @@
 import { useState, Suspense, lazy, useId, useMemo } from 'react'
 import * as React from 'react'
-import { CovertSuspense } from 'vifr/react'
+import MemoSuspense from '../../components/MemoSuspense'
 const Comments = lazy(() => import('./Comments'))
 
 export default function () {
@@ -23,13 +23,13 @@ export default function () {
       <button onClick={() => setCount((c) => c + 1)}>
         点击触发comment渲染
       </button>
-      <CovertSuspense
+      <MemoSuspense
         fallback={<div>loading22</div>}
         style={{ display: 'block' }}
         className="covert"
       >
         <Comments count={count} />
-      </CovertSuspense>
+      </MemoSuspense>
     </>
   )
 }
