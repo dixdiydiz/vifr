@@ -1,7 +1,6 @@
-import { useContext, Suspense, useState, useRef, useMemo, memo } from 'react'
+import { Suspense, useState, useRef, useMemo, memo } from 'react'
 import type { ReactElement, SuspenseProps, CSSProperties } from 'react'
 import { useIsomorphicLayoutEffect } from '../hooks'
-import { ServerSideContext } from '../entry'
 
 export interface CovertSuspenseProps {
   children: ReactElement
@@ -29,12 +28,9 @@ export function CovertSuspense({
         children,
         ...rest
       }: Pick<CovertSuspenseProps, 'children' | 'style'>) => {
-        const ctx = useContext(ServerSideContext)
         useIsomorphicLayoutEffect(() => {
-          if (ctx === null) {
-            updateRef.current = true
-            setUpdate(true)
-          }
+          updateRef.current = true
+          setUpdate(true)
         }, [])
         return (
           <>
