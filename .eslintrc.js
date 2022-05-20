@@ -1,3 +1,4 @@
+// https://github.com/playwright-community/eslint-plugin-playwright
 // @ts-check
 const { defineConfig } = require('eslint-define-config')
 
@@ -5,7 +6,8 @@ module.exports = defineConfig({
   parser: '@typescript-eslint/parser',
   extends: [
     'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended'
+    'plugin:prettier/recommended',
+    'plugin:playwright/jest-playwright'
   ],
   rules: {
     'max-len': [
