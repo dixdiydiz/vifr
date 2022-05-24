@@ -1,9 +1,3 @@
-import { editFile, untilUpdated } from '../../testUtils'
-import { port } from './serve'
-import fetch from 'node-fetch'
-
-const url = `http://localhost:${port}`
-
 test('/env', async () => {
   await page.goto(url + '/env')
   expect(await page.textContent('h1')).toMatch('default message here')
