@@ -8,6 +8,6 @@ export default async (): Promise<Config.InitialOptions> => {
       '^.+\\.tsx?$': 'ts-jest'
     },
     testMatch: ['**/__e2e__/**/?(*.)+(spec|test).[jt]s?(x)'],
-    setupFilesAfterEnv: ['<rootDir>/playground/jestSetupFilesAfterEnv.js']
+    setupFilesAfterEnv: ['<rootDir>/script/jestSetupFilesAfterEnv.js']
   }
 }

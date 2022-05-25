@@ -14,8 +14,6 @@ beforeAll(async () => {
     return
   }
   try {
-    const testPath = expect.getState().testPath
-    const basePath = cutoutBasePath(testPath)
     if (basePath) {
       if (isBuildTest) {
         // spawnSync('npm run build', {
