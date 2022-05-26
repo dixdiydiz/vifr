@@ -1,5 +1,5 @@
 test('root page', async () => {
-  await page.goto(url + '/env')
+  await page.goto('./')
   expect(await page.textContent('h1')).toMatch('default message here')
 })
 
