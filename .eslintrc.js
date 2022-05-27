@@ -7,7 +7,7 @@ module.exports = defineConfig({
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
-    'plugin:playwright/jest-playwright'
+    'plugin:playwright/playwright-test'
   ],
   rules: {
     'max-len': [

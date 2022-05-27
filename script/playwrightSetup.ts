@@ -1,30 +1,13 @@
 // https://github.com/playwright-community/jest-process-manager
-const {
-  setup: setupDevServers,
-  getServers,
-  teardown: teardownDevServers
-} = require('jest-process-manager')
-
-const isBuildTest = !!process.env.BUILD_TEST
+import { setup, getServers, teardown } from 'jest-process-manager'
 
 let err
 
-beforeAll(async () => {
-  console.log(__dirname)
-  if (!page) {
-    return
-  }
+export async function setupDevServer(root, port = 3000) {
+  err = null
+  const isTestBuild = !!Number(process.env.TEST_BUILD_MODE)
   try {
-    if (isBuildTest) {
-      await setupDevServers({
-        command: `pnpm run dev`,
-        port: 3000,
-        launchTimeout: 30000
-      })
-      getServers.then((servers) => {
-        console.log(servers)
-      })
-      console.log('到这里')
+    if (isTestBuild) {
       // spawnSync('npm run build', {
       //   stdio: 'inherit',
       //   shell: true,
@@ -51,18 +34,27 @@ beforeAll(async () => {
       // })
       // await page.goto(url)
     } else {
+      console.log('到这里', root)
+      await setup({
+        basePath: root,
+        command: `pnpm run dev`,
+        port,
+        launchTimeout: 30000,
+        usedPortAction: 'kill'
+      })
+      const servers = getServers()
+      console.log('servers:', servers)
+      console.log('到这里')
     }
   } catch (e) {
-    console.log('cuowu')
+    console.log('cuowu', e)
     err = e
-    await page.close()
   }
-}, 30000)
+}
 
-afterAll(async () => {
-  await page?.close()
-  await teardownDevServers()
+export async function teardownDevServer() {
+  await teardown()
   if (err) {
     throw err
   }
-})
+}

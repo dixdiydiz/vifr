@@ -1,4 +1,22 @@
-test('root page', async () => {
+import * as path from 'path'
+import { test, expect } from '@playwright/test'
+import {
+  setupDevServer,
+  teardownDevServer
+} from '../../../../script/playwrightSetup'
+
+const rootPath = path.resolve(__dirname, '../')
+
+test.beforeAll(async () => {
+  console.log('Before tests1')
+  await setupDevServer(rootPath)
+  console.log('Before tests2')
+})
+test.afterAll(async () => {
+  await teardownDevServer()
+})
+
+test('root page', async ({ page }) => {
   await page.goto('./')
   expect(await page.textContent('h1')).toMatch('default message here')
 })
