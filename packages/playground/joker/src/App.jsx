@@ -8,7 +8,7 @@ export default function App() {
   const [count, setCount] = useState(0)
   return (
     <>
-      <h3>App Component1</h3>
+      <h3 id="app-h3">App Component</h3>
       <ul>
         <li>
           <Link to="/otherhome" reloadDocument>

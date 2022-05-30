@@ -1,9 +1,9 @@
-// https://github.com/playwright-community/jest-process-manager
-import { setup, getServers, teardown } from 'jest-process-manager'
+import { spawn } from 'child_process'
 
 let err
+let proc
 
-export async function setupDevServer(root, port = 3000) {
+export async function setupDevServer(root) {
   err = null
   const isTestBuild = !!Number(process.env.TEST_BUILD_MODE)
   try {
@@ -34,26 +34,37 @@ export async function setupDevServer(root, port = 3000) {
       // })
       // await page.goto(url)
     } else {
-      console.log('到这里', root)
-      await setup({
-        basePath: root,
-        command: `pnpm run dev`,
-        port,
-        launchTimeout: 30000,
-        usedPortAction: 'kill'
+      const url = await new Promise((resolve, reject) => {
+        proc = spawn('npm run dev', {
+          cwd: root,
+          shell: true,
+          timeout: 10000
+        })
+        proc.on('error', (err) => {
+          console.error(err)
+          reject(err)
+        })
+        proc.stdout.on('data', (data) => {
+          const dataStr = data.toString()
+          if (dataStr.includes('http')) {
+            resolve(dataStr)
+          }
+        })
+        proc.on('close', (code) => {
+          console.log(`child process exited with code ${code}`)
+        })
       })
-      const servers = getServers()
-      console.log('servers:', servers)
-      console.log('到这里')
+      console.log('current test cwd start dev:', url)
     }
   } catch (e) {
-    console.log('cuowu', e)
     err = e
   }
 }
 
 export async function teardownDevServer() {
-  await teardown()
+  if (proc) {
+    proc.kill()
+  }
   if (err) {
     throw err
   }
