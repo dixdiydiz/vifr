@@ -1,5 +1,6 @@
-import type { RoutesConfig, InlineConfig, VifrResolvedConfig } from './config'
+import type { RoutesConfig, InlineConfig, UserConfig } from './config'
+import { defineConfig } from './config'
 
-export { InlineConfig, VifrResolvedConfig, RoutesConfig }
+export { InlineConfig, UserConfig, RoutesConfig, defineConfig }
 
 export * from './utils'

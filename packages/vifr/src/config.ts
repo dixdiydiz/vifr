@@ -1,4 +1,6 @@
 import type {
+  ConfigEnv,
+  UserConfig as ViteUserConfig,
   InlineConfig as ViteInlineConfig,
   ServerOptions as ViteServerOptions,
   ResolvedConfig as ViteResolvedConfig
@@ -14,6 +16,24 @@ import pluginCollection from './plugins/builtInReactComponentsPlugin'
 import { loggerPrefix, createLogger } from './logger'
 import { isObject } from './utils'
 
+/**
+ * override vite config file type check
+ */
+export interface UserConfig extends ViteUserConfig {
+  routes?: RoutesConfig
+}
+
+export type UserConfigExport = UserConfig | Promise<UserConfig> | UserConfigFn
+
+export type UserConfigFn = (env: ConfigEnv) => UserConfig | Promise<UserConfig>
+
+export function defineConfig(config: UserConfigExport): UserConfigExport {
+  return config
+}
+
+/**
+ * createVifrServer config
+ */
 export interface InlineConfig extends ViteInlineConfig {
   /**
    * Server specific options, e.g. host, port, https...
@@ -25,10 +45,6 @@ export interface InlineConfig extends ViteInlineConfig {
 export type RoutesConfig = {
   suffix?: string
   caseSensitive?: boolean
-}
-
-export interface VifrResolvedConfig extends ViteResolvedConfig {
-  routes?: RoutesConfig
 }
 
 export interface ResolveConfig {
