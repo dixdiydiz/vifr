@@ -12,7 +12,7 @@ export default async (): Promise<Config.InitialOptions> => {
     },
     verbose: false,
     testMatch: [
-      '**/__tests__/**/*.[jt]s?(x)',
+      '**/__tests__/**/?(*.)+(spec|test).[jt]s?(x)',
       '**/?(*.)+(spec|test).[jt]s?(x)'
     ],
     testPathIgnorePatterns: ['/__e2e__/']

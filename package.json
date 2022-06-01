@@ -44,8 +44,8 @@
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-license": "^2.7.0",
     "rollup-plugin-typescript2": "^0.31.2",
-    "ts-jest": "^27.1.5",
-    "ts-node": "^10.7.0",
+    "ts-jest": "^28.0.3",
+    "ts-node": "10.8.0",
     "ts-toolbelt": "^9.6.0",
     "tslib": "^2.4.0",
     "typescript": "^4.6.4"
