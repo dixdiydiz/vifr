@@ -2,6 +2,7 @@
 import { PlaywrightTestConfig } from '@playwright/test'
 
 const config: PlaywrightTestConfig = {
+  workers: 1, // all tests should run in order
   use: {
     // Configure browser and context here
     browserName: 'chromium',

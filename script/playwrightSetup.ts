@@ -1,9 +1,10 @@
 import { spawn } from 'child_process'
 
-let err
-let proc
+let err: Error | null
+let proc: any
+let closeProcResolve: (value: unknown) => void = () => {}
 
-export async function setupDevServer(root) {
+export async function setupDevServer(root: string) {
   err = null
   const isTestBuild = !!Number(process.env.TEST_BUILD_MODE)
   try {
@@ -40,18 +41,19 @@ export async function setupDevServer(root) {
           shell: true,
           timeout: 10000
         })
-        proc.on('error', (err) => {
+        proc.on('error', (err: Error) => {
           console.error(err)
           reject(err)
         })
-        proc.stdout.on('data', (data) => {
+        proc.on('close', (code: string | number) => {
+          console.log(`child process exited with code ${code}`)
+          closeProcResolve(true)
+        })
+        proc.stdout.on('data', (data: any) => {
           const dataStr = data.toString()
           if (dataStr.includes('http')) {
             resolve(dataStr)
           }
-        })
-        proc.on('close', (code) => {
-          console.log(`child process exited with code ${code}`)
         })
       })
       console.log('current test cwd start dev:', url)
@@ -63,7 +65,10 @@ export async function setupDevServer(root) {
 
 export async function teardownDevServer() {
   if (proc) {
-    proc.kill()
+    await new Promise((resolve, reject) => {
+      closeProcResolve = resolve
+      proc.kill()
+    })
   }
   if (err) {
     throw err

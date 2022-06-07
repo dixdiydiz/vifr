@@ -1,5 +1,3 @@
-// @ts-check
-const fs = require('fs')
 const path = require('path')
 const express = require('express')
 const {
@@ -10,8 +8,6 @@ const {
 
 const isTest =
   process.env.NODE_ENV === 'test' || !!Number(process.env.TEST_BUILD_MODE)
-
-process.env.MY_CUSTOM_SECRET = 'API_KEY_qwertyuiop'
 
 async function createServer(
   root = process.cwd(),
@@ -56,10 +52,11 @@ async function createServer(
   return { app }
 }
 
-createServer().then(({ app }) =>
+createServer().then(({ app }) => {
   app.listen(3000, () => {
     console.log('http://localhost:3000')
   })
-)
+})
 
+// for test use
 exports.createServer = createServer

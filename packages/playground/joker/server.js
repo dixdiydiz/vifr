@@ -11,8 +11,6 @@ const {
 const isTest =
   process.env.NODE_ENV === 'test' || !!Number(process.env.TEST_BUILD_MODE)
 
-process.env.MY_CUSTOM_SECRET = 'API_KEY_qwertyuiop'
-
 async function createServer(
   root = process.cwd(),
   isProd = process.env.NODE_ENV === 'production'
